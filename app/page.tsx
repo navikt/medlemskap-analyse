@@ -7,7 +7,7 @@ export default function Home() {
         height: "100vh",
         fontSize: "2rem"
       }}>
-        Analyseverktøy
+        Analyseverktøy!
       </div>
   );
 }
