@@ -11,7 +11,6 @@ RUN npm ci
 
 COPY next.config.ts tsconfig.json ./
 COPY app app
-COPY components components
 
 RUN npm run build
 
