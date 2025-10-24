@@ -24,7 +24,7 @@ export default function Home() {
 
     const handleDownload = async () => {
         const monthNumber = (months.indexOf(month) + 1).toString().padStart(2, "0")
-        const aarMaaned = `${year}${monthNumber}` // Format: yyyyMM (e.g., 202510)
+        const aarMaaned = `${year}${monthNumber}` // Format: yyyyMM
 
         try {
             const response = await fetch(`/hentUttrekk/${aarMaaned}`)
