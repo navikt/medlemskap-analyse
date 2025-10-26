@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
 
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
+const BACKEND_CLIENT_ID = "39f402c0-7373-49e3-9e64-9669181f78d4"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
     try {
@@ -28,27 +29,28 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         }
         console.log("[v0] Token validert")
 
-        let finalToken = token
-        const cluster = process.env.CLUSTER || "dev-gcp"
-        const audience = `api://${cluster}.medlemskap.medlemskap-saga/.default`
-
+        const audience = `api://${BACKEND_CLIENT_ID}/.default`
         console.log("[v0] Forsøker OBO med audience:", audience)
-        const obo = await requestAzureOboToken(token, audience)
 
-        if (obo.ok) {
-            console.log("[v0] OBO token hentet - bruker OBO token")
-            finalToken = obo.token
-        } else {
-            console.log("[v0] OBO feilet, prøver med original token:", obo.error.message)
-            // Use original token as fallback
+        const obo = await requestAzureOboToken(token, audience)
+        if (!obo.ok) {
+            console.log("[v0] OBO utveksling feilet:", obo.error.message)
+            return NextResponse.json(
+                {
+                    error: "OBO token utveksling feilet",
+                    details: obo.error.message,
+                },
+                { status: 500 },
+            )
         }
 
+        console.log("[v0] OBO token hentet")
         const backendUrl = `${API_BASE_URL}/hentUttrekk/${aarMaaned}`
         console.log("[v0] Kaller backend:", backendUrl)
 
         const response = await fetch(backendUrl, {
             headers: {
-                Authorization: `Bearer ${finalToken}`,
+                Authorization: `Bearer ${obo.token}`,
             },
         })
 
@@ -57,18 +59,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         if (!response.ok) {
             const errorText = await response.text()
             console.log("[v0] Backend feil:", errorText)
-
-            if (response.status === 401 || response.status === 403) {
-                return NextResponse.json(
-                    {
-                        error: "Backend godtar ikke tokenet",
-                        details: errorText,
-                        help: "Sjekk at medlemskap-saga har Azure AD enabled og riktig audience. Kjør: kubectl get deployment medlemskap-saga -n medlemskap -o jsonpath='{.spec.template.spec.containers[0].env[?(@.name==\"AZURE_APP_CLIENT_ID\")].value}'",
-                    },
-                    { status: response.status },
-                )
-            }
-
             return NextResponse.json(
                 { error: "Kunne ikke hente fil fra backend", status: response.status, details: errorText },
                 { status: response.status },
