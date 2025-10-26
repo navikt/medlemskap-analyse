@@ -3,9 +3,9 @@ import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
 
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
 
-export async function GET(request: NextRequest, { params }: { params: { aarMaaned: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
     try {
-        const { aarMaaned } = params
+        const { aarMaaned } = await params
         console.log("[v0] Henter uttrekk for:", aarMaaned)
 
         const authHeader = request.headers.get("Authorization")
