@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getToken, validateAzureToken, requestAzureOboToken } from "@navikt/oasis"
+import { getToken, validateToken, requestOboToken } from "@navikt/oasis"
 
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
 
@@ -8,14 +8,20 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         const { aarMaaned } = await params
         console.log("[v0] Henter uttrekk for:", aarMaaned)
 
-        const token = getToken(request)
+        const authHeader = request.headers.get("Authorization")
+        if (!authHeader) {
+            console.log("[v0] Manglende Authorization header")
+            return NextResponse.json({ error: "Manglende Authorization header" }, { status: 401 })
+        }
+
+        const token = getToken(authHeader)
         if (!token) {
             console.log("[v0] Manglende token")
             return NextResponse.json({ error: "Manglende token" }, { status: 401 })
         }
         console.log("[v0] Token funnet")
 
-        const validation = await validateAzureToken(token)
+        const validation = await validateToken(token)
         if (!validation.ok) {
             console.log("[v0] Token validering feilet:", validation.error)
             return NextResponse.json({ error: "Ugyldig token", details: validation.error }, { status: 401 })
@@ -24,17 +30,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         const audience = process.env.BACKEND_AUDIENCE
         if (!audience) {
-            console.log("[v0] BACKEND_AUDIENCE ikke satt")
+            console.log("[v0] BACKEND_AUDIENCE mangler")
             return NextResponse.json({ error: "BACKEND_AUDIENCE ikke konfigurert" }, { status: 500 })
         }
         console.log("[v0] Audience:", audience)
 
-        const obo = await requestAzureOboToken(token, audience)
+        const obo = await requestOboToken(token, audience)
         if (!obo.ok) {
             console.log("[v0] OBO utveksling feilet:", obo.error)
-            return NextResponse.json({ error: "Kunne ikke utveksle token", details: obo.error }, { status: 401 })
+            return NextResponse.json({ error: "OBO utveksling feilet", details: obo.error.message }, { status: 401 })
         }
-        console.log("[v0] OBO token mottatt")
+        console.log("[v0] OBO token hentet")
 
         const backendUrl = `${API_BASE_URL}/hentUttrekk/${aarMaaned}`
         console.log("[v0] Kaller backend:", backendUrl)
