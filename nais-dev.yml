@@ -38,11 +38,11 @@ spec:
         - application: medlemskap-analyse
         - application: nav-dekoratoren
           namespace: personbruker
-        - application: medlemskap-vurdering
+        - application: medlemskap-saga
           namespace: medlemskap
 
   env:
         - name: BACKEND_AUDIENCE
-          value: api://dev-gcp.medlemskap-vurdering/.default
+          value: api://dev-gcp.medlemskap.medlemskap-saga/.default
   tokenx:
     enabled: true
