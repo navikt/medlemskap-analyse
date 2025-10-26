@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             return NextResponse.json({ error: "Ugyldig token" }, { status: 401 })
         }
 
-        const audience = process.env.BACKEND_AUDIENCE || "api://dev-gcp.teammedlemskap.medlemskap-vurdering/.default"
+        const audience = process.env.BACKEND_AUDIENCE || "api://dev-gcp.medlemskap-vurdering/.default"
         const obo = await requestAzureOboToken(token, audience)
 
         if (!obo.ok) {
