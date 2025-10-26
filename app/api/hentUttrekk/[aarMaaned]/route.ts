@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getToken, validateToken, requestOboToken } from "@navikt/oasis"
+import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
 
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: { aarMaaned: string } }) {
     try {
-        const { aarMaaned } = await params
+        const { aarMaaned } = params
         console.log("[v0] Henter uttrekk for:", aarMaaned)
 
         const authHeader = request.headers.get("Authorization")
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         }
         console.log("[v0] Audience:", audience)
 
-        const obo = await requestOboToken(token, audience)
+        const obo = await requestAzureOboToken(token, audience)
         if (!obo.ok) {
             console.log("[v0] OBO utveksling feilet:", obo.error)
             return NextResponse.json({ error: "OBO utveksling feilet", details: obo.error.message }, { status: 401 })
