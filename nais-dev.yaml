@@ -38,5 +38,11 @@ spec:
         - application: medlemskap-analyse
         - application: nav-dekoratoren
           namespace: personbruker
+        - application: medlemskap-vurdering
+          namespace: teammedlemskap
+
+  env:
+        - name: BACKEND_AUDIENCE
+          value: api://dev-gcp.teammedlemskap.medlemskap-vurdering/.default
   tokenx:
     enabled: true

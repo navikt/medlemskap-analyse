@@ -3,6 +3,8 @@
 import { useState } from "react"
 import "./page.css"
 
+const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
+
 export default function Home() {
     const [year, setYear] = useState("2025")
     const [month, setMonth] = useState("Januar")
@@ -24,10 +26,10 @@ export default function Home() {
 
     const handleDownload = async () => {
         const monthNumber = (months.indexOf(month) + 1).toString().padStart(2, "0")
-        const aarMaaned = `${year}${monthNumber}` // Format: yyyyMM
+        const aarMaaned = `${year}${monthNumber}`
 
         try {
-            const response = await fetch(`/hentUttrekk/${aarMaaned}`)
+            const response = await fetch(`/api/hentUttrekk/${aarMaaned}`)
 
             if (!response.ok) {
                 throw new Error("Kunne ikke laste ned fil")
