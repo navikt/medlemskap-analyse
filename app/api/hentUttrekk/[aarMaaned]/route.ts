@@ -34,6 +34,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         let successfulScope = null
 
         let oboToken = await requestAzureOboToken(token, SAGA_CLIENT)
+        let tokenet = null
+        if (oboToken.ok) {
+            tokenet = oboToken.token
+        } else {
+            throw new Error("Tokenfeil: OBO token var null")
+        }
 
 
         const backendUrl = `${API_BASE_URL}/hentUttrekk/${aarMaaned}`
@@ -41,7 +47,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         const response = await fetch(backendUrl, {
             headers: {
-                Authorization: `Bearer ${oboToken}`,
+                Authorization: `Bearer ${tokenet}`,
             },
         })
 
