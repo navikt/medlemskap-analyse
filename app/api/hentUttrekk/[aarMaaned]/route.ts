@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
 
-const API_BASE_URL = process.env.API_BASE_URL!
-const SAGA_CLIENT = process.env.SAGA_CLIENT!
+const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
+const SAGA_CLIENT = "api://dev-gcp.medlemskap.medlemskap-saga/.default"
 
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
