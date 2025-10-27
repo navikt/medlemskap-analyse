@@ -2,7 +2,14 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
 
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
-const BACKEND_CLIENT_ID = "39f402c0-7373-49e3-9e64-9669181f78d4"
+const SAGA_CLIENT_ID = "39f402c0-7373-49e3-9e64-9669181f78d4"
+
+const SCOPE_VARIANTS = [
+    `api://${SAGA_CLIENT_ID}`, // Uten /.default
+    `${SAGA_CLIENT_ID}`, // Bare client ID
+    `api://${SAGA_CLIENT_ID}/.default`, // Standard format
+    `api://dev-gcp.medlemskap.medlemskap-saga`, // Uten /.default
+]
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
     try {
@@ -10,6 +17,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         console.log("[v0] Henter uttrekk for:", aarMaaned)
 
         const authHeader = request.headers.get("Authorization")
+        console.log("token: "+ authHeader)
         if (!authHeader) {
             console.log("[v0] Manglende Authorization header")
             return NextResponse.json({ error: "Manglende Authorization header" }, { status: 401 })
@@ -29,28 +37,45 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         }
         console.log("[v0] Token validert")
 
-        const audience = `api://${BACKEND_CLIENT_ID}/.default`
-        console.log("[v0] Forsøker OBO med audience:", audience)
+        let oboToken = null
+        let successfulScope = null
 
-        const obo = await requestAzureOboToken(token, audience)
-        if (!obo.ok) {
-            console.log("[v0] OBO utveksling feilet:", obo.error.message)
+        for (const scope of SCOPE_VARIANTS) {
+            console.log(`[v0] Prøver OBO med scope: ${scope}`)
+            const obo = await requestAzureOboToken(token, scope)
+
+            if (obo.ok) {
+                oboToken = obo.token
+                successfulScope = scope
+                console.log(`[v0] OBO suksess med scope: ${scope}`)
+                break
+            } else {
+                console.log(`[v0] OBO feilet for scope ${scope}:`, obo.error.message)
+            }
+        }
+
+        if (!oboToken) {
+            console.log("[v0] Alle OBO-forsøk feilet. Kontakt backend-teamet for å:")
+            console.log("[v0] 1. Sjekke at saga eksponerer et API scope i Azure AD")
+            console.log("[v0] 2. Konfigurere delegated permissions (ikke bare application permissions)")
+            console.log("[v0] 3. Pre-autorisere medlemskap-analyse hvis nødvendig")
+
             return NextResponse.json(
                 {
-                    error: "OBO token utveksling feilet",
-                    details: obo.error.message,
+                    error: "OBO token utveksling feilet for alle scope-varianter",
+                    hint: "Backend må konfigurere Azure AD app til å støtte delegated permissions og eksponere API scope",
+                    triedScopes: SCOPE_VARIANTS,
                 },
                 { status: 500 },
             )
         }
 
-        console.log("[v0] OBO token hentet")
         const backendUrl = `${API_BASE_URL}/hentUttrekk/${aarMaaned}`
-        console.log("[v0] Kaller backend:", backendUrl)
+        console.log("[v0] Kaller backend med OBO token (scope:", successfulScope, "):", backendUrl)
 
         const response = await fetch(backendUrl, {
             headers: {
-                Authorization: `Bearer ${obo.token}`,
+                Authorization: `Bearer ${oboToken}`,
             },
         })
 
@@ -60,7 +85,11 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             const errorText = await response.text()
             console.log("[v0] Backend feil:", errorText)
             return NextResponse.json(
-                { error: "Kunne ikke hente fil fra backend", status: response.status, details: errorText },
+                {
+                    error: "Backend godtok ikke OBO-tokenet",
+                    status: response.status,
+                    details: errorText,
+                },
                 { status: response.status },
             )
         }
