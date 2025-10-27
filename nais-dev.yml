@@ -42,7 +42,7 @@ spec:
           namespace: medlemskap
 
   env:
-        - name: BACKEND_AUDIENCE
-          value: api://dev-gcp.medlemskap.medlemskap-saga/.default
-  tokenx:
-    enabled: true
+    - name: SAGA_CLIENT
+      value: api://dev-gcp.medlemskap.medlemskap-saga/.default
+    - name: API_BASE_URL
+      value: https://medlemskap-vurdering.intern.dev.nav.no
