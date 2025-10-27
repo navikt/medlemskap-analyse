@@ -25,7 +25,7 @@ spec:
       claims:
         extra:
           - azp_name
-          - id: NAVident
+          - NAVident
 
     sidecar:
       enabled: true
