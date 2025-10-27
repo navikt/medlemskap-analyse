@@ -6,26 +6,11 @@ import "./page.css"
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
 
 export default function Home() {
-    const getCurrentPeriod = () => {
-        const now = new Date()
-        const startDate = new Date(2025, 9, 1)
-
-        // Midlertidig default til Oktober
-        if (now < startDate) {
-            return "202510"
-        }
-
-        const year = now.getFullYear()
-        const month = (now.getMonth() + 1).toString().padStart(2, "0")
-        return `${year}${month}`
-    }
-
-    const [selectedPeriod, setSelectedPeriod] = useState(getCurrentPeriod())
-    const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null)
+    const [selectedPeriod, setSelectedPeriod] = useState("202510")
 
     const availablePeriods = useMemo(() => {
         const periods: { value: string; label: string }[] = []
-        const startDate = new Date(2025, 9, 1) // jan er 0
+        const startDate = new Date(2025, 9, 1) // 0 index på mnd
         const currentDate = new Date()
 
         const currentPeriod = new Date(startDate)
@@ -60,11 +45,6 @@ export default function Home() {
         return periods
     }, [])
 
-    const showNotification = (type: "success" | "error", message: string) => {
-        setNotification({ type, message })
-        setTimeout(() => setNotification(null), 3000)
-    }
-
     const handleDownload = async () => {
         try {
             const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`)
@@ -82,12 +62,9 @@ export default function Home() {
             a.click()
             window.URL.revokeObjectURL(url)
             document.body.removeChild(a)
-
-            const periodLabel = availablePeriods.find((p) => p.value === selectedPeriod)?.label
-            showNotification("success", `Filen ble lastet ned (${periodLabel})`)
         } catch (error) {
             console.error("Feil ved nedlasting:", error)
-            showNotification("error", "Kunne ikke laste ned filen. Prøv igjen.")
+            alert("Kunne ikke laste ned filen")
         }
     }
 
@@ -106,8 +83,6 @@ export default function Home() {
 
                 <button onClick={handleDownload}>Last ned</button>
             </div>
-
-            {notification && <div className={`notification ${notification.type}`}>{notification.message}</div>}
         </div>
     )
 }

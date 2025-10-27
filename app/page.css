@@ -52,20 +52,3 @@
 .controls button:active {
     background-color: #1d4ed8;
 }
-
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    border-radius: 4px;
-    color: white;
-}
-
-.notification.success {
-    background-color: #10b981;
-}
-
-.notification.error {
-    background-color: #ef4444;
-}
