@@ -46,3 +46,5 @@ spec:
       value: api://dev-gcp.medlemskap.medlemskap-saga/.default
     - name: API_BASE_URL
       value: https://medlemskap-vurdering.intern.dev.nav.no
+  tokenx:
+      enabled: true

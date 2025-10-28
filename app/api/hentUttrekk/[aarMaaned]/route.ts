@@ -71,7 +71,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         return new NextResponse(blob, {
             headers: {
                 "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "Content-Disposition": 'attachment; filename="Lovme.xlsx"',
+                "Content-Disposition": 'attachment',
             },
         })
     } catch (error) {
