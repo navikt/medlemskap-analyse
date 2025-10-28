@@ -41,7 +41,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         }
 
 
-        const backendUrl = `${API_BASE_URL}/hentUttrekk/${aarMaaned}`
+        const backendUrl = `${API_BASE_URL}/analyse/hentUttrekk/${aarMaaned}`
         console.log("[v0] Kaller backend med OBO token (scope:", successfulScope, "):", backendUrl)
 
         const response = await fetch(backendUrl, {
