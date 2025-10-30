@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Medlemskap Analyse
 
-## Getting Started
+## Teknisk stack
 
-First, run the development server:
+- **Frontend**: Next.js 16 med App Router
+- **Autentisering**: Azure AD via Wonderwall og Oasis
+- **Backend integrasjon**: OBO (On-Behalf-Of) token exchange mot medlemskap-saga
+- **Deployment**: NAIS på GCP
 
-```bash
+## Kom i gang
+
+### Forutsetninger
+
+- Node.js 20 eller høyere
+- npm
+
+### Installasjon
+
+1. Klon repositoriet:
+
+\`\`\`bash
+git clone <repository-url>
+cd medlemskap-analyse
+\`\`\`
+
+2. Installer avhengigheter:
+
+\`\`\`bash
+npm install
+\`\`\`
+
+3. Start utviklingsserveren:
+
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Åpne [http://localhost:3000](http://localhost:3000) i nettleseren
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Tilgjengelige scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Starter utviklingsserveren
+- `npm run build` - Bygger applikasjonen for produksjon
+- `npm run start` - Starter produksjonsserveren
+- `npm run lint` - Kjører ESLint
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Applikasjonen deployes automatisk til NAIS på GCP via GitHub Actions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Miljøer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Dev**: https://medlemskap-analyse.intern.dev.nav.no
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
