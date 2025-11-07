@@ -13,16 +13,6 @@ spec:
     - https://medlemskap-analyse.ansatt.nav.no
   image: {{image}}
   port: 3000
-  liveness:
-    path: /api/isAlive
-    port: 3000
-    initialDelay: 20
-    timeout: 60
-    readiness:
-      path: /api/isReady
-      port: 3000
-      initialDelay: 20
-      timeout: 60
   prometheus:
     enabled: true
     path: "/api/metrics"
