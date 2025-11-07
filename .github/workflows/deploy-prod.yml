@@ -51,4 +51,4 @@ jobs:
         env:
           CLUSTER: prod-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
-          RESOURCE: app/config/nais-prod.yml
+          RESOURCE: config/nais-prod.yml
