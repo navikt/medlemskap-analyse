@@ -1,9 +1,5 @@
 name: Build & Deploy
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+on: [ pull_request ]
 
 jobs:
   build:
