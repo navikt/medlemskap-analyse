@@ -1,12 +1,45 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
+import fs from "fs"
+import path from "path"
+import yaml from "js-yaml"
 
-const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
-const SAGA_CLIENT = "api://dev-gcp.medlemskap.medlemskap-saga/.default"
+let cachedConfig: Record<string, string> | null = null
 
+async function loadConfig(): Promise<Record<string, string>> {
+    if (cachedConfig) return cachedConfig
+
+    // Velg riktig fil basert på NODE_ENV
+    const env = process.env.NODE_ENV === "production" ? "prod" : "dev"
+    const fileName = `nais-${env}.yml`
+    const filePath = path.join(process.cwd(), fileName)
+
+    const fileContents = fs.readFileSync(filePath, "utf8")
+    const yamlData = yaml.load(fileContents) as any
+
+    const envVars: Record<string, string> = {}
+    if (Array.isArray(yamlData.env)) {
+        yamlData.env.forEach((entry: any) => {
+            envVars[entry.name] = entry.value
+        })
+    }
+
+    cachedConfig = envVars
+    return envVars
+}
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
     try {
+
+        const config = await loadConfig()
+
+        const API_BASE_URL = config.API_BASE_URL
+
+        const SAGA_CLIENT = config.SAGA_CLIENT
+        console.log("API: ", API_BASE_URL)
+        console.log("SAGA_CLIENT: ", SAGA_CLIENT)
+
+
         const { aarMaaned } = await params
         console.log("[v0] Henter uttrekk for:", aarMaaned)
 
@@ -82,3 +115,4 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         )
     }
 }
+
