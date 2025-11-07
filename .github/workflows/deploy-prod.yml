@@ -45,10 +45,10 @@ jobs:
         env:
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
-          RESOURCE: nais-dev.yml
+          RESOURCE: config/nais-dev.yml
       - name: Deploy to prod
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
-          RESOURCE: nais-prod.yml
+          RESOURCE: config/nais-prod.yml
