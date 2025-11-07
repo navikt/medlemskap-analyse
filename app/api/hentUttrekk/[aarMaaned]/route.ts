@@ -11,8 +11,8 @@ async function loadConfig(): Promise<Record<string, string>> {
 
     // Velg riktig fil basert på NODE_ENV
     const env = process.env.NODE_ENV === "production" ? "prod" : "dev"
-    const fileName = `nais-${env}.yml`
-    const filePath = path.join(process.cwd(), fileName)
+    const fileName = `nais-${env}.yml`;
+    const filePath = path.join(process.cwd(), "config", fileName);
 
     const fileContents = fs.readFileSync(filePath, "utf8")
     const yamlData = yaml.load(fileContents) as any
