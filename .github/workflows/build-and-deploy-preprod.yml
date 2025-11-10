@@ -39,6 +39,7 @@ jobs:
       - name: Deploy to nais
         uses: nais/deploy/actions/deploy@v2
         env:
+          ENV: dev
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: config/nais-dev.yml

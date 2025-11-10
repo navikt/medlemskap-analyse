@@ -10,7 +10,7 @@ async function loadConfig(): Promise<Record<string, string>> {
     if (cachedConfig) return cachedConfig
 
     // Velg riktig fil basert på NODE_ENV
-    const env = process.env.NODE_ENV === "production" ? "prod" : "dev"
+    const env = process.env.ENV === "prod" ? "prod" : "dev"
     console.log("miljø: ", env)
     const fileName = `nais-${env}.yml`;
     const filePath = path.join(process.cwd(), "config", fileName);
@@ -47,12 +47,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         const config = await loadConfig()
         console.log("config", config)
 
-        //const API_BASE_URL = config.API_BASE_URL
-        //const SAGA_CLIENT = config.SAGA_CLIENT
-
-        //Hardkodet for dev. Skal fjernes.
-        const API_BASE_URL = "api://dev-gcp.medlemskap.medlemskap-saga/.default"
-        const SAGA_CLIENT = "https://medlemskap-vurdering.intern.dev.nav.no"
+        const API_BASE_URL = config.API_BASE_URL
+        const SAGA_CLIENT = config.SAGA_CLIENT
 
         console.log("API: ", API_BASE_URL)
         console.log("SAGA_CLIENT: ", SAGA_CLIENT)
