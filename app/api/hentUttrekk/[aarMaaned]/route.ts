@@ -27,14 +27,15 @@ async function loadConfig(): Promise<Record<string, string>> {
     console.log("yamlData.env:", yamlData.env)
 
     const envVars: Record<string, string> = {}
-    if (Array.isArray(yamlData.env)) {
-        yamlData.env.forEach((entry: any) => {
-            envVars[entry.name] = entry.value
-        })
-    }
 
-    cachedConfig = envVars
-    return envVars
+    const envArray = Array.isArray(yamlData?.spec?.env) ? yamlData.spec.env : []
+    envArray.forEach((entry: any) => {
+        if (entry?.name && entry?.value !== undefined) {
+            envVars[entry.name] = String(entry.value).trim()
+        } else {
+            console.warn("Ugyldig YAML entry:", entry)
+        }
+    })
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
