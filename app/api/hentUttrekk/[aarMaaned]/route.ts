@@ -47,12 +47,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         const config = await loadConfig()
         console.log("config", config)
 
-        const API_BASE_URL = config.API_BASE_URL
+        //const API_BASE_URL = config.API_BASE_URL
+        //const SAGA_CLIENT = config.SAGA_CLIENT
 
-        const SAGA_CLIENT = config.SAGA_CLIENT
+        //Hardkodet for dev. Skal fjernes.
+        const API_BASE_URL = "api://dev-gcp.medlemskap.medlemskap-saga/.default"
+        const SAGA_CLIENT = "https://medlemskap-vurdering.intern.dev.nav.no"
+
         console.log("API: ", API_BASE_URL)
         console.log("SAGA_CLIENT: ", SAGA_CLIENT)
-
 
         const { aarMaaned } = await params
         console.log("[v0] Henter uttrekk for:", aarMaaned)
@@ -112,13 +115,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             )
         }
 
-        const blob = await response.blob()
-        console.log("[v0] Fil hentet, størrelse:", blob.size)
+        const csvTekst = await response.text()
+        console.log("[v0] Fil hentet, størrelse:", csvTekst.length)
 
-        return new NextResponse(blob, {
+        return new NextResponse(csvTekst, {
             headers: {
-                "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "Content-Disposition": 'attachment',
+                "Content-Type": "text/csv; charset=utf-8",
+                "Content-Disposition": `attachment`,
             },
         })
     } catch (error) {
