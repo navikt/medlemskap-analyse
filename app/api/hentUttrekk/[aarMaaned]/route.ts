@@ -11,6 +11,7 @@ async function loadConfig(): Promise<Record<string, string>> {
 
     // Velg riktig fil basert på NODE_ENV
     const env = process.env.NODE_ENV === "production" ? "prod" : "dev"
+    console.log("miljø: ", env)
     const fileName = `nais-${env}.yml`;
     const filePath = path.join(process.cwd(), "config", fileName);
 
@@ -32,6 +33,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     try {
 
         const config = await loadConfig()
+        console.log("config", config)
 
         const API_BASE_URL = config.API_BASE_URL
 
