@@ -26,7 +26,10 @@ async function loadConfig(): Promise<Record<string, string>> {
         console.log("YAML raw content:\n", fileContents);
     } catch (err) {
         console.error("Feil ved lesing av fil:", err);
-        return NextResponse.json({ error: "Feil ved lesing av fil", details: err.message }, { status: 500 });
+        return NextResponse.json(
+            { error: "Feil ved lesing av fil", details: (err as Error).message } as Record<string, any>,
+            { status: 500 }
+        )
     }
 
     const yamlData = yaml.load(fileContents) as any
