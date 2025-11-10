@@ -23,6 +23,8 @@ async function loadConfig(): Promise<Record<string, string>> {
     const fileContents = fs.readFileSync(filePath, "utf8")
     console.log("Filinnhold", fileContents)
     const yamlData = yaml.load(fileContents) as any
+    console.log("yamlData:", JSON.stringify(yamlData, null, 2))
+    console.log("yamlData.env:", yamlData.env)
 
     const envVars: Record<string, string> = {}
     if (Array.isArray(yamlData.env)) {
