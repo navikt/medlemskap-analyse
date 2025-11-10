@@ -20,18 +20,8 @@ async function loadConfig(): Promise<Record<string, string>> {
     console.log("Exists:", fs.existsSync(filePath));
 
 
-    let fileContents: string;
-    try {
-        fileContents = fs.readFileSync(filePath, "utf8");
-        console.log("YAML raw content:\n", fileContents);
-    } catch (err) {
-        console.error("Feil ved lesing av fil:", err);
-        return NextResponse.json(
-            { error: "Feil ved lesing av fil", details: (err as Error).message } as Record<string, any>,
-            { status: 500 }
-        )
-    }
-
+    const fileContents = fs.readFileSync(filePath, "utf8")
+    console.log("Filinnhold", fileContents)
     const yamlData = yaml.load(fileContents) as any
 
     const envVars: Record<string, string> = {}
