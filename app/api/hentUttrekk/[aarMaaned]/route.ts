@@ -15,7 +15,20 @@ async function loadConfig(): Promise<Record<string, string>> {
     const fileName = `nais-${env}.yml`;
     const filePath = path.join(process.cwd(), "config", fileName);
 
-    const fileContents = fs.readFileSync(filePath, "utf8")
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log("Filepath:", filePath);
+    console.log("Exists:", fs.existsSync(filePath));
+
+
+    let fileContents: string;
+    try {
+        fileContents = fs.readFileSync(filePath, "utf8");
+        console.log("YAML raw content:\n", fileContents);
+    } catch (err) {
+        console.error("Feil ved lesing av fil:", err);
+        return NextResponse.json({ error: "Feil ved lesing av fil", details: err.message }, { status: 500 });
+    }
+
     const yamlData = yaml.load(fileContents) as any
 
     const envVars: Record<string, string> = {}
