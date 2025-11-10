@@ -24,7 +24,7 @@ async function loadConfig(): Promise<Record<string, string>> {
     console.log("Filinnhold", fileContents)
     const yamlData = yaml.load(fileContents) as any
     console.log("yamlData:", JSON.stringify(yamlData, null, 2))
-    console.log("yamlData.env:", yamlData.env)
+    console.log("yamlData.spec.env:", yamlData.env)
 
     const envVars: Record<string, string> = {}
 
@@ -36,6 +36,9 @@ async function loadConfig(): Promise<Record<string, string>> {
             console.warn("Ugyldig YAML entry:", entry)
         }
     })
+
+    cachedConfig = envVars
+    return envVars
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
