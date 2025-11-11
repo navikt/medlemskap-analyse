@@ -40,6 +40,9 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
+    outputs:
+      image: ${{ steps.docker-push.outputs.image }}
+
   deploypreprod:
     name: Deploy to preprod
     needs: build
