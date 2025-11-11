@@ -11,7 +11,7 @@ async function loadConfig(): Promise<Record<string, string>> {
 
     // Velg riktig fil basert på ENV
     const env = process.env.NAIS_ENV === "prod" ? "prod" : "dev";
-    console.log("env: ", process.spec.env)
+    console.log("env: ", process.env)
     console.log("miljø: ", env)
     const fileName = `nais-${env}.yml`;
     const filePath = path.join(process.cwd(), "config", fileName);
