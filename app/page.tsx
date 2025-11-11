@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import {useState, useMemo} from "react"
 import "./page.css"
 
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
@@ -53,7 +53,7 @@ export default function Home() {
             const value = `${year}${(month + 1).toString().padStart(2, "0")}`
             const label = `${monthNames[month]} ${year}`
 
-            periods.push({ value, label })
+            periods.push({value, label})
 
             currentPeriod.setMonth(currentPeriod.getMonth() + 1)
         }
@@ -63,27 +63,20 @@ export default function Home() {
 
     const handleDownload = async () => {
         try {
-            console.log("[v0] Starter nedlasting for periode:", selectedPeriod)
             const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`)
 
-            console.log("[v0] Response status:", response.status)
-            console.log("[v0] Response headers:", Object.fromEntries(response.headers.entries()))
 
             if (!response.ok) {
                 throw new Error("Kunne ikke laste ned fil")
             }
 
             const blob = await response.blob()
-            console.log("[v0] Blob type:", blob.type)
-            console.log("[v0] Blob size:", blob.size)
-
-            const csvBlob = new Blob([blob], { type: "text/csv" })
+            const csvBlob = new Blob([blob], {type: "text/csv"})
             const url = window.URL.createObjectURL(csvBlob)
             const a = document.createElement("a")
             a.href = url
             a.download = `uttrekk-${selectedPeriod}.csv`
             document.body.appendChild(a)
-            console.log("[v0] Klikker på nedlastingslenke")
             a.click()
             window.URL.revokeObjectURL(url)
             document.body.removeChild(a)
