@@ -63,17 +63,27 @@ export default function Home() {
 
     const handleDownload = async () => {
         try {
+            console.log("[v0] Starter nedlasting for periode:", selectedPeriod)
             const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`)
+
+            console.log("[v0] Response status:", response.status)
+            console.log("[v0] Response headers:", Object.fromEntries(response.headers.entries()))
 
             if (!response.ok) {
                 throw new Error("Kunne ikke laste ned fil")
             }
 
             const blob = await response.blob()
-            const url = window.URL.createObjectURL(blob)
+            console.log("[v0] Blob type:", blob.type)
+            console.log("[v0] Blob size:", blob.size)
+
+            const csvBlob = new Blob([blob], { type: "text/csv" })
+            const url = window.URL.createObjectURL(csvBlob)
             const a = document.createElement("a")
             a.href = url
+            a.download = `uttrekk-${selectedPeriod}.csv`
             document.body.appendChild(a)
+            console.log("[v0] Klikker på nedlastingslenke")
             a.click()
             window.URL.revokeObjectURL(url)
             document.body.removeChild(a)
@@ -81,7 +91,7 @@ export default function Home() {
             setNotification("Filen ble lastet ned!")
             setTimeout(() => setNotification(null), 3000)
         } catch (error) {
-            console.error("Feil ved nedlasting:", error)
+            console.error("[v0] Feil ved nedlasting:", error)
             alert("Kunne ikke laste ned filen")
         }
     }
