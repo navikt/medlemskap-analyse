@@ -57,7 +57,7 @@ jobs:
         env:
           NAIS_ENV: dev
           CLUSTER: dev-gcp
-          IMAGE: ${{ steps.docker-push.outputs.image }}
+          IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: config/nais-dev.yml
   deployprod:
     name: Deploy to prod
@@ -73,5 +73,5 @@ jobs:
         env:
           NAIS_ENV: prod
           CLUSTER: prod-gcp
-          IMAGE: ${{ steps.docker-push.outputs.image }}
+          IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: config/nais-prod.yml
