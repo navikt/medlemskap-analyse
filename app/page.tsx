@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import {useState, useMemo} from "react"
 import "./page.css"
 
 const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
@@ -53,7 +53,7 @@ export default function Home() {
             const value = `${year}${(month + 1).toString().padStart(2, "0")}`
             const label = `${monthNames[month]} ${year}`
 
-            periods.push({ value, label })
+            periods.push({value, label})
 
             currentPeriod.setMonth(currentPeriod.getMonth() + 1)
         }
@@ -65,14 +65,17 @@ export default function Home() {
         try {
             const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`)
 
+
             if (!response.ok) {
                 throw new Error("Kunne ikke laste ned fil")
             }
 
             const blob = await response.blob()
-            const url = window.URL.createObjectURL(blob)
+            const csvBlob = new Blob([blob], {type: "text/csv"})
+            const url = window.URL.createObjectURL(csvBlob)
             const a = document.createElement("a")
             a.href = url
+            a.download = `uttrekk-${selectedPeriod}.csv`
             document.body.appendChild(a)
             a.click()
             window.URL.revokeObjectURL(url)
@@ -81,7 +84,7 @@ export default function Home() {
             setNotification("Filen ble lastet ned!")
             setTimeout(() => setNotification(null), 3000)
         } catch (error) {
-            console.error("Feil ved nedlasting:", error)
+            console.error("[v0] Feil ved nedlasting:", error)
             alert("Kunne ikke laste ned filen")
         }
     }

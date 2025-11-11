@@ -9,22 +9,14 @@ let cachedConfig: Record<string, string> | null = null
 async function loadConfig(): Promise<Record<string, string>> {
     if (cachedConfig) return cachedConfig
 
-    // Velg riktig fil basert på NODE_ENV
-    const env = process.env.NODE_ENV === "production" ? "prod" : "dev"
+    // Velg riktig fil basert på ENV
+    const env = process.env.ENV === "prod" ? "prod" : "dev"
     console.log("miljø: ", env)
     const fileName = `nais-${env}.yml`;
     const filePath = path.join(process.cwd(), "config", fileName);
 
-    console.log("NODE_ENV:", process.env.NODE_ENV);
-    console.log("Filepath:", filePath);
-    console.log("Exists:", fs.existsSync(filePath));
-
-
     const fileContents = fs.readFileSync(filePath, "utf8")
-    console.log("Filinnhold", fileContents)
     const yamlData = yaml.load(fileContents) as any
-    console.log("yamlData:", JSON.stringify(yamlData, null, 2))
-    console.log("yamlData.spec.env:", yamlData.env)
 
     const envVars: Record<string, string> = {}
 
@@ -48,11 +40,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         console.log("config", config)
 
         const API_BASE_URL = config.API_BASE_URL
-
         const SAGA_CLIENT = config.SAGA_CLIENT
+
         console.log("API: ", API_BASE_URL)
         console.log("SAGA_CLIENT: ", SAGA_CLIENT)
-
 
         const { aarMaaned } = await params
         console.log("[v0] Henter uttrekk for:", aarMaaned)
@@ -112,13 +103,13 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             )
         }
 
-        const blob = await response.blob()
-        console.log("[v0] Fil hentet, størrelse:", blob.size)
+        const csvTekst = await response.text()
+        console.log("[v0] Fil hentet, størrelse:", csvTekst.length)
 
-        return new NextResponse(blob, {
+        return new NextResponse(csvTekst, {
             headers: {
-                "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "Content-Disposition": 'attachment',
+                "Content-Type": "text/csv; charset=utf-8",
+                "Content-Disposition": `attachment; filename="uttrekk-${aarMaaned}.csv"`,
             },
         })
     } catch (error) {
