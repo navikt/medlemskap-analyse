@@ -40,15 +40,23 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
-      - name: Deploy to preprod
-        uses: nais/deploy/actions/deploy@v2
+  deploypreprod:
+    name: Deploy to preprod
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nais/deploy/actions/deploy@v2
         env:
           NAIS_ENV: dev
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: config/nais-dev.yml
-      - name: Deploy to prod
-        uses: nais/deploy/actions/deploy@v2
+  deploprod:
+    name: Deploy to prod
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nais/deploy/actions/deploy@v2
         env:
           NAIS_ENV: prod
           CLUSTER: prod-gcp
