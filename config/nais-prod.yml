@@ -45,7 +45,8 @@ spec:
           namespace: medlemskap
 
   env:
-    - NAIS_ENV: prod
+    - name: NAIS_ENV
+      value: prod
     - name: SAGA_CLIENT
       value: api://prod-gcp.medlemskap.medlemskap-saga/.default
     - name: API_BASE_URL

@@ -42,7 +42,8 @@ spec:
           namespace: medlemskap
 
   env:
-    - NAIS_ENV: dev
+    - name: NAIS_ENV
+      value: dev
     - name: SAGA_CLIENT
       value: api://dev-gcp.medlemskap.medlemskap-saga/.default
     - name: API_BASE_URL
