@@ -49,6 +49,7 @@ jobs:
       id-token: write
       packages: write
     steps:
+      - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
           NAIS_ENV: dev
@@ -64,6 +65,7 @@ jobs:
       id-token: write
       packages: write
     steps:
+      - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
           NAIS_ENV: prod
