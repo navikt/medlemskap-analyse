@@ -43,14 +43,14 @@ jobs:
       - name: Deploy to preprod
         uses: nais/deploy/actions/deploy@v2
         env:
-          ENV: dev
+          NAIS_ENV: dev
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: config/nais-dev.yml
       - name: Deploy to prod
         uses: nais/deploy/actions/deploy@v2
         env:
-          ENV: prod
+          NAIS_ENV: prod
           CLUSTER: prod-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: config/nais-prod.yml
