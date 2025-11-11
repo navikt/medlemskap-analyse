@@ -44,6 +44,10 @@ jobs:
     name: Deploy to preprod
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     steps:
       - uses: nais/deploy/actions/deploy@v2
         env:
@@ -51,10 +55,14 @@ jobs:
           CLUSTER: dev-gcp
           IMAGE: ${{ steps.docker-push.outputs.image }}
           RESOURCE: config/nais-dev.yml
-  deploprod:
+  deployprod:
     name: Deploy to prod
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
     steps:
       - uses: nais/deploy/actions/deploy@v2
         env:
