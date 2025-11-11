@@ -55,7 +55,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          NAIS_ENV: dev
           CLUSTER: dev-gcp
           IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: config/nais-dev.yml
@@ -71,7 +70,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          NAIS_ENV: prod
           CLUSTER: prod-gcp
           IMAGE: ${{ needs.build.outputs.image }}
           RESOURCE: config/nais-prod.yml
