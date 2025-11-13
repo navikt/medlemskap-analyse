@@ -69,20 +69,9 @@ export default function Home() {
                 throw new Error("Kunne ikke laste ned fil")
             }
 
-            // Les responsen som stream
-            const reader = response.body!.getReader()
-            const chunks: Uint8Array[] = []
-            let done = false
-
-            while (!done) {
-                const { value, done: readerDone } = await reader.read()
-                if (value) chunks.push(value)
-                done = readerDone
-            }
-
-            const safeChunks = chunks.map(c => c.slice())
-            const blob = new Blob(safeChunks, { type: "text/csv" })
-            const url = window.URL.createObjectURL(blob)
+            const blob = await response.blob()
+            const csvBlob = new Blob([blob], {type: "text/csv"})
+            const url = window.URL.createObjectURL(csvBlob)
             const a = document.createElement("a")
             a.href = url
             a.download = `uttrekk-${selectedPeriod}.csv`

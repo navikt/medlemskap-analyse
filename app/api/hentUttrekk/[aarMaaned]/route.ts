@@ -107,7 +107,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         const csvTekst = await response.text()
         console.log("[v0] Fil hentet, størrelse:", csvTekst.length)
 
-        return new NextResponse(response.body, {
+        return new NextResponse(csvTekst, {
             headers: {
                 "Content-Type": "text/csv; charset=utf-8",
                 "Content-Disposition": `attachment; filename="uttrekk-${aarMaaned}.csv"`
