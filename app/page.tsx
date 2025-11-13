@@ -80,7 +80,8 @@ export default function Home() {
                 done = readerDone
             }
 
-            const blob = new Blob(chunks as ArrayBufferView[], { type: "text/csv" })
+            const safeChunks = chunks.map(c => c.slice())
+            const blob = new Blob(safeChunks, { type: "text/csv" })
             const url = window.URL.createObjectURL(blob)
             const a = document.createElement("a")
             a.href = url
