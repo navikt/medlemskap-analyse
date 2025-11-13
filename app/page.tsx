@@ -65,7 +65,6 @@ export default function Home() {
         try {
             const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`)
 
-
             if (!response.ok) {
                 throw new Error("Kunne ikke laste ned fil")
             }
