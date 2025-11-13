@@ -65,14 +65,23 @@ export default function Home() {
         try {
             const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`)
 
-
             if (!response.ok) {
                 throw new Error("Kunne ikke laste ned fil")
             }
 
-            const blob = await response.blob()
-            const csvBlob = new Blob([blob], {type: "text/csv"})
-            const url = window.URL.createObjectURL(csvBlob)
+            // Les responsen som stream
+            const reader = response.body!.getReader()
+            const chunks: Uint8Array[] = []
+            let done = false
+
+            while (!done) {
+                const { value, done: readerDone } = await reader.read()
+                if (value) chunks.push(value)
+                done = readerDone
+            }
+
+            const blob = new Blob(chunks, { type: "text/csv" })
+            const url = window.URL.createObjectURL(blob)
             const a = document.createElement("a")
             a.href = url
             a.download = `uttrekk-${selectedPeriod}.csv`
