@@ -35,6 +35,9 @@ async function loadConfig(): Promise<Record<string, string>> {
 }
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 1000 * 600)
+
     try {
 
         const config = await loadConfig()
@@ -79,7 +82,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             throw new Error("Tokenfeil: OBO token var null")
         }
 
-
         const backendUrl = `${API_BASE_URL}/analyse/hentUttrekk/${aarMaaned}`
         console.log("[v0] Kaller backend med OBO token (scope:", successfulScope, "):", backendUrl)
 
@@ -87,7 +89,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             headers: {
                 Authorization: `Bearer ${tokenet}`,
             },
+            cache: "no-store",
+            signal: controller.signal
         })
+        clearTimeout(timeout)
 
         console.log("[v0] Backend response status:", response.status)
 
@@ -115,6 +120,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         })
     } catch (error) {
         console.error("[v0] Feil ved henting av uttrekk:", error)
+        clearTimeout(timeout)
         return NextResponse.json(
             { error: "Intern serverfeil", details: error instanceof Error ? error.message : String(error) },
             { status: 500 },
