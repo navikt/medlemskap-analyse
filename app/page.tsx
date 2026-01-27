@@ -93,7 +93,7 @@ export default function Home() {
                 <div className="success-message">
                     <h2>Forespørsel sendt</h2>
                     <p>Generering av fil for den valgte perioden er startet. Dette kan ta flere minutter.</p>
-                    <p>Du kan trygt lukke denne siden. Filen vil bli tilgjengelig når genereringen er fullført.</p>
+                    <p>Du kan trygt lukke denne siden. Filen vil bli tilgjengelig i Google Bucket når genereringen er fullført.</p>
                     <button onClick={() => setIsSubmitted(false)}>Send ny forespørsel</button>
                 </div>
             ) : (
