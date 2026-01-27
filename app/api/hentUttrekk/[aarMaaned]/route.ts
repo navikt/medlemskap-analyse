@@ -92,10 +92,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
                 Authorization: `Bearer ${tokenet}`,
             },
             cache: "no-store",
-        }).then((response) => {
-            console.log("[v0] Backend response status:", response.status)
-        }).catch((error) => {
-            console.error("[v0] Backend feil:", error)
         })
 
         clearTimeout(timeout)

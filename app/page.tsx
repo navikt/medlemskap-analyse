@@ -65,7 +65,7 @@ export default function Home() {
             const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`, { method: "POST" })
 
             if (response.ok) {
-                setNotification("Fil ferdig generert til GCP")
+                setNotification("Forespørsel for generering av fil er sendt!")
             } else if (response.status === 401) {
                 setNotification("Ikke autorisert")
             } else if (response.status === 500) {
@@ -76,8 +76,8 @@ export default function Home() {
 
             setTimeout(() => setNotification(null), 3000)
         } catch (error) {
-            console.error("Teknisk feil har oppstått ved generering av fil", error)
-            setNotification("Teknisk feil har oppstått ved generering av fil")
+            console.error("Feil ved sending:", error)
+            setNotification("Nettverksfeil")
             setTimeout(() => setNotification(null), 3000)
         }
     }
