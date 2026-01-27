@@ -63,7 +63,7 @@ export default function Home() {
 
     const handleDownload = async () => {
         try {
-            const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`)
+            const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`,{method:"POST"})
 
 
             if (!response.ok) {
