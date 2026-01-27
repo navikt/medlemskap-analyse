@@ -55,20 +55,20 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         const authHeader = request.headers.get("Authorization")
         if (!authHeader) {
             console.log("[v0] Manglende Authorization header")
-            return NextResponse.json({ error: "Manglende Authorization header" }, { status: 401 })
+            return new NextResponse(null, { status: 401 })
         }
 
         const token = getToken(authHeader)
         if (!token) {
             console.log("[v0] Manglende token")
-            return NextResponse.json({ error: "Manglende token" }, { status: 401 })
+            return new NextResponse(null, { status: 401 })
         }
         console.log("[v0] Token funnet")
 
         const validation = await validateToken(token)
         if (!validation.ok) {
             console.log("[v0] Token validering feilet:", validation.error)
-            return NextResponse.json({ error: "Ugyldig token", details: validation.error }, { status: 401 })
+            return new NextResponse(null, { status: 401 })
         }
         console.log("[v0] Token validert")
 
@@ -86,6 +86,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         console.log("[v0] Kaller backend med OBO token (scope:", successfulScope, "):", backendUrl)
 
         const response = await fetch(backendUrl, {
+            method: "POST",
             headers: {
                 Authorization: `Bearer ${tokenet}`,
             },
@@ -97,34 +98,16 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         console.log("[v0] Backend response status:", response.status)
 
         if (!response.ok) {
-            const errorText = await response.text()
-            console.log("[v0] Backend feil:", errorText)
-            return NextResponse.json(
-                {
-                    error: "Backend godtok ikke OBO-tokenet",
-                    status: response.status,
-                    details: errorText,
-                },
-                { status: response.status },
-            )
+            console.log("[v0] Backend feil, status:", response.status)
+            return new NextResponse(null, { status: response.status })
         }
 
-        const csvTekst = await response.text()
-        console.log("[v0] Fil hentet, størrelse:", csvTekst.length)
+        console.log("[v0] Respons mottatt")
 
-        return new NextResponse(csvTekst, {
-            headers: {
-                "Content-Type": "text/csv; charset=utf-8",
-                "Content-Disposition": `attachment; filename="uttrekk-${aarMaaned}.csv"`,
-            },
-        })
+        return new NextResponse(null, { status: response.status })
     } catch (error) {
         console.error("[v0] Feil ved henting av uttrekk:", error)
         clearTimeout(timeout)
-        return NextResponse.json(
-            { error: "Intern serverfeil", details: error instanceof Error ? error.message : String(error) },
-            { status: 500 },
-        )
+        return new NextResponse(null, { status: 500 })
     }
 }
-

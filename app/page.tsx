@@ -3,7 +3,6 @@
 import {useState, useMemo} from "react"
 import "./page.css"
 
-const API_BASE_URL = "https://medlemskap-vurdering.intern.dev.nav.no"
 
 export default function Home() {
     const getCurrentPeriod = () => {
@@ -61,31 +60,25 @@ export default function Home() {
         return periods
     }, [])
 
-    const handleDownload = async () => {
+    const handleSubmit = async () => {
         try {
-            const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`,{method:"POST"})
+            const response = await fetch(`/api/hentUttrekk/${selectedPeriod}`, { method: "POST" })
 
-
-            if (!response.ok) {
-                throw new Error("Kunne ikke laste ned fil")
+            if (response.ok) {
+                setNotification("Fil ferdig generert til GCP")
+            } else if (response.status === 401) {
+                setNotification("Ikke autorisert")
+            } else if (response.status === 500) {
+                setNotification("Teknisk feil har oppstått")
+            } else {
+                setNotification(`Feil: ${response.status}`)
             }
 
-            const blob = await response.blob()
-            const csvBlob = new Blob([blob], {type: "text/csv"})
-            const url = window.URL.createObjectURL(csvBlob)
-            const a = document.createElement("a")
-            a.href = url
-            a.download = `uttrekk-${selectedPeriod}.csv`
-            document.body.appendChild(a)
-            a.click()
-            window.URL.revokeObjectURL(url)
-            document.body.removeChild(a)
-
-            setNotification("Filen ble lastet ned!")
             setTimeout(() => setNotification(null), 3000)
         } catch (error) {
-            console.error("[v0] Feil ved nedlasting:", error)
-            alert("Kunne ikke laste ned filen")
+            console.error("Teknisk feil har oppstått ved generering av fil", error)
+            setNotification("Teknisk feil har oppstått ved generering av fil")
+            setTimeout(() => setNotification(null), 3000)
         }
     }
 
@@ -102,7 +95,7 @@ export default function Home() {
                     ))}
                 </select>
 
-                <button onClick={handleDownload}>Last ned</button>
+                <button onClick={handleSubmit}>Send</button>
             </div>
 
             {notification && <div className="notification">{notification}</div>}
