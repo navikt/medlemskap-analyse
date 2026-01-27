@@ -34,7 +34,7 @@ async function loadConfig(): Promise<Record<string, string>> {
     return envVars
 }
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ aarMaaned: string }> }) {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 1000 * 600)
 
