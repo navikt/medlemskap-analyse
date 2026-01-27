@@ -85,26 +85,23 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         const backendUrl = `${API_BASE_URL}/analyse/hentUttrekk/${aarMaaned}`
         console.log("[v0] Kaller backend med OBO token (scope:", successfulScope, "):", backendUrl)
 
-        const response = await fetch(backendUrl, {
+        // Fire and forget - ikke vent på svar
+        fetch(backendUrl, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${tokenet}`,
             },
             cache: "no-store",
-            signal: controller.signal
+        }).then((response) => {
+            console.log("[v0] Backend response status:", response.status)
+        }).catch((error) => {
+            console.error("[v0] Backend feil:", error)
         })
+
         clearTimeout(timeout)
+        console.log("[v0] Forespørsel sendt til backend")
 
-        console.log("[v0] Backend response status:", response.status)
-
-        if (!response.ok) {
-            console.log("[v0] Backend feil, status:", response.status)
-            return new NextResponse(null, { status: response.status })
-        }
-
-        console.log("[v0] Respons mottatt")
-
-        return new NextResponse(null, { status: response.status })
+        return new NextResponse(null, { status: 202 })
     } catch (error) {
         console.error("[v0] Feil ved henting av uttrekk:", error)
         clearTimeout(timeout)
