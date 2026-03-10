@@ -1,0 +1,34 @@
+{
+  "id": "52041604-a94a-38ca-b7a6-3e913b5207fa",
+  "type": "ARBEIDSTAKERE",
+  "status": "SENDT",
+  "fnr": "xxxxxxxxxxx",
+  "fom": "2024-01-01",
+  "tom": "2024-01-31",
+  "startSyketilfelle": "2024-01-01",
+  "sendtArbeidsgiver": "2024-01-31T12:00:00.000000",
+  "sendtNav": null,
+  "dodsdato": null,
+  "ettersending": false,
+  "arbeidUtenforNorge": false,
+  "forstegangssoknad": true,
+  "korrigerer": null,
+  "sporsmal": [
+    {
+      "id": "4d1c7907-1571-3e43-b890-9f3498eb1f06",
+      "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS",
+      "sporsmalstekst": "Har du oppholdt deg utenfor EØS i løpet av de siste 12 månedene?",
+      "undertekst": null,
+      "min": null,
+      "max": null,
+      "svartype": "JA_NEI",
+      "kriterieForVisningAvUndersporsmal": "JA",
+      "svar": [
+        {
+          "verdi": "NEI"
+        }
+      ],
+      "undersporsmal": []
+    }
+  ]
+}

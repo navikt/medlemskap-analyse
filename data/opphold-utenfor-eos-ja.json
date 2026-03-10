@@ -1,0 +1,133 @@
+{
+  "id": "52041604-a94a-38ca-b7a6-3e913b5207fa",
+  "type": "ARBEIDSTAKERE",
+  "status": "SENDT",
+  "fnr": "xxxxxxxxxxx",
+  "fom": "2024-01-01",
+  "tom": "2024-01-31",
+  "startSyketilfelle": "2024-01-01",
+  "sendtArbeidsgiver": "2024-01-31T12:00:00.000000",
+  "sendtNav": null,
+  "dodsdato": null,
+  "ettersending": false,
+  "arbeidUtenforNorge": false,
+  "forstegangssoknad": true,
+  "korrigerer": null,
+  "sporsmal": [
+    {
+      "id": "4d1c7907-1571-3e43-b890-9f3498eb1f06",
+      "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS",
+      "sporsmalstekst": "Har du oppholdt deg utenfor EØS i løpet av de siste 12 månedene?",
+      "undertekst": null,
+      "min": null,
+      "max": null,
+      "svartype": "JA_NEI",
+      "kriterieForVisningAvUndersporsmal": "JA",
+      "svar": [
+        {
+          "verdi": "JA"
+        }
+      ],
+      "undersporsmal": [
+        {
+          "id": "ae5d4266-007a-3b29-b919-21feb3739e8a",
+          "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS_GRUPPERING_0",
+          "sporsmalstekst": null,
+          "undertekst": null,
+          "min": null,
+          "max": null,
+          "svartype": "IKKE_RELEVANT",
+          "kriterieForVisningAvUndersporsmal": null,
+          "svar": [],
+          "undersporsmal": [
+            {
+              "id": "9b89b10c-cc9e-3a62-82e8-59bcdba66c71",
+              "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS_HVOR_0",
+              "sporsmalstekst": "Velg land",
+              "undertekst": null,
+              "min": null,
+              "max": null,
+              "svartype": "COMBOBOX_SINGLE",
+              "kriterieForVisningAvUndersporsmal": null,
+              "svar": [
+                {
+                  "verdi": "Frankrike"
+                }
+              ],
+              "undersporsmal": []
+            },
+            {
+              "id": "44ebffe6-b4a5-3055-ab5f-4877ff7352f9",
+              "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS_BEGRUNNELSE_0",
+              "sporsmalstekst": "Grunn for opphold",
+              "undertekst": null,
+              "min": null,
+              "max": null,
+              "svartype": "RADIO_GRUPPE",
+              "kriterieForVisningAvUndersporsmal": null,
+              "svar": [],
+              "undersporsmal": [
+                {
+                  "id": "2f4922b0-3f5e-3f85-a8f6-96be3e89d7f0",
+                  "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS_BEGRUNNELSE_STUDIE_0",
+                  "sporsmalstekst": "Studier",
+                  "undertekst": null,
+                  "min": null,
+                  "max": null,
+                  "svartype": "RADIO",
+                  "kriterieForVisningAvUndersporsmal": null,
+                  "svar": [
+                    {
+                      "verdi": "CHECKED"
+                    }
+                  ],
+                  "undersporsmal": []
+                },
+                {
+                  "id": "195014c7-565f-34ec-946e-ef6d3204a78c",
+                  "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS_BEGRUNNELSE_FERIE_0",
+                  "sporsmalstekst": "Ferie",
+                  "undertekst": null,
+                  "min": null,
+                  "max": null,
+                  "svartype": "RADIO",
+                  "kriterieForVisningAvUndersporsmal": null,
+                  "svar": [],
+                  "undersporsmal": []
+                },
+                {
+                  "id": "e952a2bc-3267-3f8c-b682-cc2e5efa312f",
+                  "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS_BEGRUNNELSE_FORSORG_0",
+                  "sporsmalstekst": "Forsørget medfølgende familiemedlem",
+                  "undertekst": null,
+                  "min": null,
+                  "max": null,
+                  "svartype": "RADIO",
+                  "kriterieForVisningAvUndersporsmal": null,
+                  "svar": [],
+                  "undersporsmal": []
+                }
+              ]
+            },
+            {
+              "id": "3937e3d8-e90b-3a78-9e78-a56c6bb30101",
+              "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_EOS_NAAR_0",
+              "sporsmalstekst": null,
+              "undertekst": null,
+              "min": "2021-08-23",
+              "max": "2023-08-23",
+              "svartype": "PERIODE",
+              "kriterieForVisningAvUndersporsmal": null,
+              "svar": [
+                {
+                  "verdi": "{\"fom\":\"2023-08-15\",\"tom\":\"2023-08-23\"}"
+                }
+              ],
+              "undersporsmal": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

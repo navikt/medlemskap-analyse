@@ -3,15 +3,14 @@
 import { useState } from "react"
 import "./page.css"
 
-
-import arbeidUtenforNorgeGammeltNei from "../data//arbeid-utenfor-norge-gammelt-nei.json"
-import oppholdUtenforEosJa from "../data//opphold-utenfor-eos-ja.json"
-import oppholdUtenforEosNei from "../data//opphold-utenfor-eos-nei.json"
-import utfortArbeidUtenforNorgeJa from "../data//utfort-arbeid-utenfor-norge-ja.json"
-import utfortArbeidUtenforNorgeNei from "../data//utfort-arbeid-utenfor-norge-nei.json"
-import oppholdstillatelseJa from "../data//oppholdstillatelse-ja.json"
-import oppholdstillatelseNei from "../data//oppholdstillatelse-nei.json"
-import arbeidUtenforNorgeGammeltJa from "../data//arbeid-utenfor-norge-gammelt-ja.json"
+import arbeidUtenforNorgeGammeltJa from "@/data/arbeid-utenfor-norge-gammelt-ja.json"
+import arbeidUtenforNorgeGammeltNei from "@/data/arbeid-utenfor-norge-gammelt-nei.json"
+import oppholdUtenforEosJa from "@/data/opphold-utenfor-eos-ja.json"
+import oppholdUtenforEosNei from "@/data/opphold-utenfor-eos-nei.json"
+import utfortArbeidUtenforNorgeJa from "@/data/utfort-arbeid-utenfor-norge-ja.json"
+import utfortArbeidUtenforNorgeNei from "@/data/utfort-arbeid-utenfor-norge-nei.json"
+import oppholdstillatelseJa from "@/data/oppholdstillatelse-ja.json"
+import oppholdstillatelseNei from "@/data/oppholdstillatelse-nei.json"
 
 type Selection = {
     enabled: boolean
@@ -132,6 +131,7 @@ export default function TestingPage() {
         oppholdstillatelse: "Oppholdstillatelse",
     }
 
+    // @ts-ignore
     return (
         <div className="container">
             <h1>JSON Generator</h1>

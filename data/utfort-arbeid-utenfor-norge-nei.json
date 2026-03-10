@@ -1,0 +1,34 @@
+{
+  "id": "52041604-a94a-38ca-b7a6-3e913b5207fa",
+  "type": "ARBEIDSTAKERE",
+  "status": "SENDT",
+  "fnr": "xxxxxxxxxxx",
+  "fom": "2024-01-01",
+  "tom": "2024-01-31",
+  "startSyketilfelle": "2024-01-01",
+  "sendtArbeidsgiver": "2024-01-31T12:00:00.000000",
+  "sendtNav": null,
+  "dodsdato": null,
+  "ettersending": false,
+  "arbeidUtenforNorge": false,
+  "forstegangssoknad": true,
+  "korrigerer": null,
+  "sporsmal": [
+    {
+      "id": "b6c1e327-7454-327f-8ae2-67b7c61df1b6",
+      "tag": "MEDLEMSKAP_UTFORT_ARBEID_UTENFOR_NORGE",
+      "sporsmalstekst": "Har du utført arbeid utenfor Norge i det siste 12 månedene?",
+      "undertekst": null,
+      "min": null,
+      "max": null,
+      "svartype": "JA_NEI",
+      "kriterieForVisningAvUndersporsmal": "JA",
+      "svar": [
+        {
+          "verdi": "NEI"
+        }
+      ],
+      "undersporsmal": []
+    }
+  ]
+}

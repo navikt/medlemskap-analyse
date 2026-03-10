@@ -1,0 +1,67 @@
+{
+  "id": "52041604-a94a-38ca-b7a6-3e913b5207fa",
+  "type": "ARBEIDSTAKERE",
+  "status": "SENDT",
+  "fnr": "xxxxxxxxxxx",
+  "fom": "2024-01-01",
+  "tom": "2024-01-31",
+  "startSyketilfelle": "2024-01-01",
+  "sendtArbeidsgiver": "2024-01-31T12:00:00.000000",
+  "sendtNav": null,
+  "dodsdato": null,
+  "ettersending": false,
+  "arbeidUtenforNorge": false,
+  "forstegangssoknad": true,
+  "korrigerer": null,
+  "sporsmal": [
+    {
+      "id": "41a9c1af-7c01-3ca1-b939-c38026653135",
+      "tag": "MEDLEMSKAP_OPPHOLDSTILLATELSE_V2",
+      "sporsmalstekst": "Har du hatt en oppholdstillatelse fra Utlendingsdirektoratet som gjelder en periode før tillatelsen som gjelder nå?",
+      "undertekst": null,
+      "min": null,
+      "max": null,
+      "svartype": "JA_NEI",
+      "kriterieForVisningAvUndersporsmal": "JA",
+      "svar": [
+        {
+          "verdi": "JA"
+        }
+      ],
+      "undersporsmal": [
+        {
+          "id": "e4961038-3a46-3367-aa50-29d1df6c6ab5",
+          "tag": "MEDLEMSKAP_OPPHOLDSTILLATELSE_VEDTAKSDATO",
+          "sporsmalstekst": "Hvilken dato fikk du denne oppholdstillatelsen?",
+          "undertekst": null,
+          "min": "2013-01-07",
+          "max": "2023-01-07",
+          "svartype": "DATO",
+          "kriterieForVisningAvUndersporsmal": null,
+          "svar": [
+            {
+              "verdi": "2023-01-01"
+            }
+          ],
+          "undersporsmal": []
+        },
+        {
+          "id": "49378e57-de36-3d81-b58b-c6d68226d32a",
+          "tag": "MEDLEMSKAP_OPPHOLDSTILLATELSE_PERIODE",
+          "sporsmalstekst": "Hvilken periode gjelder denne oppholdstillatelsen?",
+          "undertekst": null,
+          "min": "2013-01-07",
+          "max": "2033-01-07",
+          "svartype": "PERIODE",
+          "kriterieForVisningAvUndersporsmal": null,
+          "svar": [
+            {
+              "verdi": "{\"fom\":\"2022-12-13\",\"tom\":\"2023-01-02\"}"
+            }
+          ],
+          "undersporsmal": []
+        }
+      ]
+    }
+  ]
+}

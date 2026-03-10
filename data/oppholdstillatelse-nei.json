@@ -1,0 +1,34 @@
+{
+  "id": "52041604-a94a-38ca-b7a6-3e913b5207fa",
+  "type": "ARBEIDSTAKERE",
+  "status": "SENDT",
+  "fnr": "xxxxxxxxxxx",
+  "fom": "2024-01-01",
+  "tom": "2024-01-31",
+  "startSyketilfelle": "2024-01-01",
+  "sendtArbeidsgiver": "2024-01-31T12:00:00.000000",
+  "sendtNav": null,
+  "dodsdato": null,
+  "ettersending": false,
+  "arbeidUtenforNorge": false,
+  "forstegangssoknad": true,
+  "korrigerer": null,
+  "sporsmal": [
+    {
+      "id": "41a9c1af-7c01-3ca1-b939-c38026653135",
+      "tag": "MEDLEMSKAP_OPPHOLDSTILLATELSE_V2",
+      "sporsmalstekst": "Har du hatt en oppholdstillatelse fra Utlendingsdirektoratet som gjelder en periode før tillatelsen som gjelder nå?",
+      "undertekst": null,
+      "min": null,
+      "max": null,
+      "svartype": "JA_NEI",
+      "kriterieForVisningAvUndersporsmal": "JA",
+      "svar": [
+        {
+          "verdi": "NEI"
+        }
+      ],
+      "undersporsmal": []
+    }
+  ]
+}
