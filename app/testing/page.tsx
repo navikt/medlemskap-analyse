@@ -7,7 +7,7 @@ import arbeidUtenforNorgeGammeltJa from "../../data/arbeid-utenfor-norge-gammelt
 import arbeidUtenforNorgeGammeltNei from "../../data/arbeid-utenfor-norge-gammelt-nei.json"
 import oppholdUtenforEosJa from "../../data/opphold-utenfor-eos-ja.json"
 import oppholdUtenforEosNei from "../../data/opphold-utenfor-eos-nei.json"
-import utfortArbeidUtenforNorgeJa from "../../data/utfort-arbeid-utenfor-Norge-ja.json"
+import utfortArbeidUtenforNorgeJa from "../../data/utfort-arbeid-utenfor-norge-ja.json"
 import utfortArbeidUtenforNorgeNei from "../../data/utfort-arbeid-utenfor-norge-nei.json"
 import oppholdstillatelseJa from "../../data/oppholdstillatelse-ja.json"
 import oppholdstillatelseNei from "../../data/oppholdstillatelse-nei.json"
