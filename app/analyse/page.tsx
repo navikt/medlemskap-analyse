@@ -85,7 +85,7 @@ export default function AnalysePage() {
 
     return (
         <div className="container">
-            <h1>Analyseverktoy</h1>
+            <h1>Analyseverktøy</h1>
 
             {isSubmitted ? (
                 <div className="success-message">
