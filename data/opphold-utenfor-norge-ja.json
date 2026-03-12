@@ -1,0 +1,133 @@
+{
+  "id": "52041604-a94a-38ca-b7a6-3e913b5207fa",
+  "type": "ARBEIDSTAKERE",
+  "status": "SENDT",
+  "fnr": "xxxxxxxxxxx",
+  "fom": "2024-01-01",
+  "tom": "2024-01-31",
+  "startSyketilfelle": "2024-01-01",
+  "sendtArbeidsgiver": "2024-01-31T12:00:00.000000",
+  "sendtNav": null,
+  "dodsdato": null,
+  "ettersending": false,
+  "arbeidUtenforNorge": false,
+  "forstegangssoknad": true,
+  "korrigerer": null,
+  "sporsmal": [
+    {
+      "id": "961cae09-3bae-3348-9c6d-ea042aceb3f0",
+      "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE",
+      "sporsmalstekst": "Har du oppholdt deg utenfor Norge i løpet av de siste 12 månedene?",
+      "undertekst": null,
+      "min": null,
+      "max": null,
+      "svartype": "JA_NEI",
+      "kriterieForVisningAvUndersporsmal": "JA",
+      "svar": [
+        {
+          "verdi": "JA"
+        }
+      ],
+      "undersporsmal": [
+        {
+          "id": "f1a5f03e-0a30-3318-95a3-ec78116e2915",
+          "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE_GRUPPERING_0",
+          "sporsmalstekst": null,
+          "undertekst": null,
+          "min": null,
+          "max": null,
+          "svartype": "IKKE_RELEVANT",
+          "kriterieForVisningAvUndersporsmal": null,
+          "svar": [],
+          "undersporsmal": [
+            {
+              "id": "7161a9e9-03b6-306e-8dd5-d47545c307b3",
+              "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE_HVOR_0",
+              "sporsmalstekst": "Velg land",
+              "undertekst": null,
+              "min": null,
+              "max": null,
+              "svartype": "COMBOBOX_SINGLE",
+              "kriterieForVisningAvUndersporsmal": null,
+              "svar": [
+                {
+                  "verdi": "Bolivia"
+                }
+              ],
+              "undersporsmal": []
+            },
+            {
+              "id": "f2683931-f96f-3e62-83e4-3ce686b093e5",
+              "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE_BEGRUNNELSE_0",
+              "sporsmalstekst": "Grunn for opphold",
+              "undertekst": null,
+              "min": null,
+              "max": null,
+              "svartype": "RADIO_GRUPPE",
+              "kriterieForVisningAvUndersporsmal": null,
+              "svar": [],
+              "undersporsmal": [
+                {
+                  "id": "6e1495da-cd19-30a5-9b79-5c033602c028",
+                  "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE_BEGRUNNELSE_STUDIE_0",
+                  "sporsmalstekst": "Studier",
+                  "undertekst": null,
+                  "min": null,
+                  "max": null,
+                  "svartype": "RADIO",
+                  "kriterieForVisningAvUndersporsmal": null,
+                  "svar": [],
+                  "undersporsmal": []
+                },
+                {
+                  "id": "ff8a016d-ad33-32ce-a576-e12547dce046",
+                  "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE_BEGRUNNELSE_FERIE_0",
+                  "sporsmalstekst": "Ferie",
+                  "undertekst": null,
+                  "min": null,
+                  "max": null,
+                  "svartype": "RADIO",
+                  "kriterieForVisningAvUndersporsmal": null,
+                  "svar": [],
+                  "undersporsmal": []
+                },
+                {
+                  "id": "4d063abd-0ee9-3e35-be84-634f93eab17a",
+                  "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE_BEGRUNNELSE_FORSORG_0",
+                  "sporsmalstekst": "Forsørget medfølgende familiemedlem",
+                  "undertekst": null,
+                  "min": null,
+                  "max": null,
+                  "svartype": "RADIO",
+                  "kriterieForVisningAvUndersporsmal": null,
+                  "svar": [
+                    {
+                      "verdi": "CHECKED"
+                    }
+                  ],
+                  "undersporsmal": []
+                }
+              ]
+            },
+            {
+              "id": "b63e18e3-5bd4-3ec2-84b0-24f0d8234657",
+              "tag": "MEDLEMSKAP_OPPHOLD_UTENFOR_NORGE_NAAR_0",
+              "sporsmalstekst": null,
+              "undertekst": null,
+              "min": "2021-08-23",
+              "max": "2023-08-23",
+              "svartype": "PERIODE",
+              "kriterieForVisningAvUndersporsmal": null,
+              "svar": [
+                {
+                  "verdi": "{\"fom\":\"2023-08-01\",\"tom\":\"2023-08-20\"}"
+                }
+              ],
+              "undersporsmal": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
