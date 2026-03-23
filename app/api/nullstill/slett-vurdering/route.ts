@@ -40,10 +40,13 @@ export async function POST(request: NextRequest) {
 
     try {
         const config = await loadConfig()
+        console.log("[v0] Config loaded:", config)
         const MEDLEMSKAP_VURDERING_CLIENT = config.MEDLEMSKAP_VURDERING_CLIENT
+        console.log("[v0] MEDLEMSKAP_VURDERING_CLIENT:", MEDLEMSKAP_VURDERING_CLIENT)
 
         const body = await request.json()
         const fnr = body.fnr
+        console.log("[v0] fnr:", fnr)
 
         if (!fnr || fnr.length !== 11) {
             return new NextResponse(JSON.stringify({ error: "Ugyldig fnr" }), { status: 400 })

@@ -55,6 +55,6 @@ spec:
     - name: MEDLEMSKAP_VURDERING_CLIENT
       value: api://dev-gcp.medlemskap.medlemskap-vurdering/.default
     - name: MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT
-      value: api://dev-gcp.medlemskap.medlemskap-vurdering-sykepenger
+      value: api://dev-gcp.medlemskap.medlemskap-vurdering-sykepenger/.default
   tokenx:
       enabled: true
