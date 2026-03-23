@@ -40,13 +40,15 @@ export async function POST(request: NextRequest) {
 
     try {
         const config = await loadConfig()
-        console.log("[v0] Config loaded:", config)
         const MEDLEMSKAP_VURDERING_CLIENT = config.MEDLEMSKAP_VURDERING_CLIENT
-        console.log("[v0] MEDLEMSKAP_VURDERING_CLIENT:", MEDLEMSKAP_VURDERING_CLIENT)
+
+        if (!MEDLEMSKAP_VURDERING_CLIENT) {
+            console.error("MEDLEMSKAP_VURDERING_CLIENT ikke funnet i config. Tilgjengelige keys:", Object.keys(config))
+            return new NextResponse(JSON.stringify({ error: "Konfigurasjonsfeil" }), { status: 500 })
+        }
 
         const body = await request.json()
         const fnr = body.fnr
-        console.log("[v0] fnr:", fnr)
 
         if (!fnr || fnr.length !== 11) {
             return new NextResponse(JSON.stringify({ error: "Ugyldig fnr" }), { status: 400 })
@@ -69,7 +71,8 @@ export async function POST(request: NextRequest) {
 
         const oboToken = await requestAzureOboToken(token, MEDLEMSKAP_VURDERING_CLIENT)
         if (!oboToken.ok) {
-            throw new Error("Tokenfeil: OBO token var null")
+            console.error("OBO token feilet for client:", MEDLEMSKAP_VURDERING_CLIENT, "Error:", oboToken.error)
+            throw new Error(`Tokenfeil: ${oboToken.error}`)
         }
 
         const backendUrl = "https://medlemskap-vurdering.intern.dev.nav.no/test/slett-vurdering"

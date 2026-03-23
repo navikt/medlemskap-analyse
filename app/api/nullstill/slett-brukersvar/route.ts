@@ -42,6 +42,11 @@ export async function POST(request: NextRequest) {
         const config = await loadConfig()
         const MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT = config.MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT
 
+        if (!MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT) {
+            console.error("MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT ikke funnet i config. Tilgjengelige keys:", Object.keys(config))
+            return new NextResponse(JSON.stringify({ error: "Konfigurasjonsfeil" }), { status: 500 })
+        }
+
         const body = await request.json()
         const fnr = body.fnr
 
@@ -66,7 +71,8 @@ export async function POST(request: NextRequest) {
 
         const oboToken = await requestAzureOboToken(token, MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT)
         if (!oboToken.ok) {
-            throw new Error("Tokenfeil: OBO token var null")
+            console.error("OBO token feilet for client:", MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT, "Error:", oboToken.error)
+            throw new Error(`Tokenfeil: ${oboToken.error}`)
         }
 
         const backendUrl = "https://medlemskap-vurdering-sykepenger.intern.dev.nav.no/test/slett-brukersvar"
