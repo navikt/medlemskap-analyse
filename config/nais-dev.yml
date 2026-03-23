@@ -54,7 +54,9 @@ spec:
       value: https://medlemskap-vurdering.intern.dev.nav.no
     - name: MEDLEMSKAP_VURDERING_CLIENT
       value: api://dev-gcp.medlemskap.medlemskap-vurdering/.default
-    - name: MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT
-      value: api://dev-gcp.medlemskap.medlemskap-vurdering-sykepenger/.default
+    - name: SYKEPENGER_API_BASE_URL
+      value: "https://medlemskap-vurdering-sykepenger.intern.dev.nav.no"
+    - name: SYKEPENGER_CLIENT
+      value: "api://dev-gcp.medlemskap.medlemskap-vurdering-sykepenger/.default"
   tokenx:
       enabled: true
