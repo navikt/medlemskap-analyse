@@ -40,12 +40,8 @@ export async function POST(request: NextRequest) {
 
     try {
         const config = await loadConfig()
+        const API_BASE_URL = config.API_BASE_URL
         const SAGA_CLIENT = config.SAGA_CLIENT
-
-        if (!SAGA_CLIENT) {
-            console.error("SAGA_CLIENT ikke funnet i config. Tilgjengelige keys:", Object.keys(config))
-            return new NextResponse(JSON.stringify({ error: "Konfigurasjonsfeil" }), { status: 500 })
-        }
 
         const body = await request.json()
         const fnr = body.fnr
@@ -75,7 +71,7 @@ export async function POST(request: NextRequest) {
             throw new Error(`Tokenfeil: ${oboToken.error}`)
         }
 
-        const backendUrl = "https://medlemskap-saga.intern.dev.nav.no/test/slett-vurdering"
+        const backendUrl = `${API_BASE_URL}/test/slett-vurdering`
 
         const response = await fetch(backendUrl, {
             method: "POST",
