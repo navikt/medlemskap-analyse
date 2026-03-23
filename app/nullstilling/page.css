@@ -1,0 +1,86 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+h1 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.warning-text {
+    color: #dc2626;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+.options-card {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.nullstill-section {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.nullstill-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.nullstill-section:first-child {
+    padding-top: 0;
+}
+
+.nullstill-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.nullstill-section p {
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.nullstill-button {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.nullstill-button:hover:not(:disabled) {
+    background-color: #b91c1c;
+}
+
+.nullstill-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.success-message {
+    color: #059669;
+    margin-top: 1rem;
+    font-weight: 500;
+}
+
+.error-message {
+    color: #dc2626;
+    margin-top: 1rem;
+    font-weight: 500;
+}
