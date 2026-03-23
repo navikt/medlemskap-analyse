@@ -44,7 +44,7 @@ export default function NullstillingPage() {
         setIsLoading1(true)
         setResult1(null)
         try {
-            const response = await fetch("https://medlemskap-vurdering.intern.dev.nav.no/test/slett-vurdering", {
+            const response = await fetch("/api/nullstill/slett-vurdering", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ fnr: fnr.trim() }),
