@@ -40,10 +40,10 @@ export async function POST(request: NextRequest) {
 
     try {
         const config = await loadConfig()
-        const MEDLEMSKAP_VURDERING_CLIENT = config.MEDLEMSKAP_VURDERING_CLIENT
+        const SAGA_CLIENT = config.SAGA_CLIENT
 
-        if (!MEDLEMSKAP_VURDERING_CLIENT) {
-            console.error("MEDLEMSKAP_VURDERING_CLIENT ikke funnet i config. Tilgjengelige keys:", Object.keys(config))
+        if (!SAGA_CLIENT) {
+            console.error("SAGA_CLIENT ikke funnet i config. Tilgjengelige keys:", Object.keys(config))
             return new NextResponse(JSON.stringify({ error: "Konfigurasjonsfeil" }), { status: 500 })
         }
 
@@ -69,13 +69,13 @@ export async function POST(request: NextRequest) {
             return new NextResponse(null, { status: 401 })
         }
 
-        const oboToken = await requestAzureOboToken(token, MEDLEMSKAP_VURDERING_CLIENT)
+        const oboToken = await requestAzureOboToken(token, SAGA_CLIENT)
         if (!oboToken.ok) {
-            console.error("OBO token feilet for client:", MEDLEMSKAP_VURDERING_CLIENT, "Error:", oboToken.error)
+            console.error("OBO token feilet for client:", SAGA_CLIENT, "Error:", oboToken.error)
             throw new Error(`Tokenfeil: ${oboToken.error}`)
         }
 
-        const backendUrl = "https://medlemskap-vurdering.intern.dev.nav.no/test/slett-vurdering"
+        const backendUrl = "https://medlemskap-saga.intern.dev.nav.no/test/slett-vurdering"
 
         const response = await fetch(backendUrl, {
             method: "POST",
