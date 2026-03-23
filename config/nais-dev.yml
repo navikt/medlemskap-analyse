@@ -40,6 +40,8 @@ spec:
           namespace: personbruker
         - application: medlemskap-saga
           namespace: medlemskap
+        - application: medlemskap-vurdering-sykepenger
+          namespace: medlemskap
 
   env:
     - name: NAIS_ENV
@@ -48,5 +50,7 @@ spec:
       value: api://dev-gcp.medlemskap.medlemskap-saga/.default
     - name: API_BASE_URL
       value: https://medlemskap-vurdering.intern.dev.nav.no
+    - name: MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT
+      value: "dev-gcp:medlemskap:medlemskap-vurdering-sykepenger"
   tokenx:
       enabled: true
