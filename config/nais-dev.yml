@@ -40,6 +40,8 @@ spec:
           namespace: personbruker
         - application: medlemskap-saga
           namespace: medlemskap
+        - application: medlemskap-vurdering
+          namespace: medlemskap
         - application: medlemskap-vurdering-sykepenger
           namespace: medlemskap
 
@@ -50,7 +52,9 @@ spec:
       value: api://dev-gcp.medlemskap.medlemskap-saga/.default
     - name: API_BASE_URL
       value: https://medlemskap-vurdering.intern.dev.nav.no
+    - name: MEDLEMSKAP_VURDERING_CLIENT
+      value: api://dev-gcp.medlemskap.medlemskap-vurdering/.default
     - name: MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT
-      value: "dev-gcp:medlemskap:medlemskap-vurdering-sykepenger"
+      value: api://dev-gcp.medlemskap.medlemskap-vurdering-sykepenger
   tokenx:
       enabled: true
