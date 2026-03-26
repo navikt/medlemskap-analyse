@@ -52,7 +52,6 @@ spec:
       value: api://dev-gcp.medlemskap.medlemskap-saga/.default
     - name: API_BASE_URL
       value: https://medlemskap-vurdering.intern.dev.nav.no
-
     - name: SYKEPENGER_API_BASE_URL
       value: https://medlemskap-vurdering-sykepenger.intern.dev.nav.no
     - name: SYKEPENGER_CLIENT
