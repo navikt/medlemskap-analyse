@@ -42,7 +42,7 @@ spec:
           namespace: medlemskap
         - application: medlemskap-vurdering
           namespace: medlemskap
-        - application: medlemskap-vurdering-sykepenger
+        - application: medlemskap-sykepenger-listener
           namespace: medlemskap
 
   env:
