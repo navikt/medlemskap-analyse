@@ -88,7 +88,8 @@ export async function POST(request: NextRequest) {
             return new NextResponse(null, { status: response.status })
         }
 
-        return new NextResponse(null, { status: 200 })
+        const data = await response.json()
+        return NextResponse.json(data)
     } catch (error) {
         console.error("Feil ved slett-brukersvar:", error)
         clearTimeout(timeout)
