@@ -41,7 +41,9 @@ export async function POST(request: NextRequest) {
     try {
         const config = await loadConfig()
         const SYKEPENGER_API_BASE_URL = config.SYKEPENGER_API_BASE_URL
+        console.log("SYKEPENGER_API_BASE_URL", SYKEPENGER_API_BASE_URL)
         const SYKEPENGER_CLIENT = config.SYKEPENGER_CLIENT
+        console.log("SYKEPENGER_CLIENT", SYKEPENGER_CLIENT)
 
         const body = await request.json()
         const fnr = body.fnr
@@ -67,7 +69,8 @@ export async function POST(request: NextRequest) {
 
         const oboToken = await requestAzureOboToken(token, SYKEPENGER_CLIENT)
         if (!oboToken.ok) {
-            throw new Error("Tokenfeil: OBO token var null")
+            console.error("OBO token feilet for client:", SYKEPENGER_CLIENT, "Error:", oboToken.error)
+            throw new Error(`Tokenfeil: ${oboToken.error}`)
         }
 
         const backendUrl = `${SYKEPENGER_API_BASE_URL}/test/slett-brukersvar`
