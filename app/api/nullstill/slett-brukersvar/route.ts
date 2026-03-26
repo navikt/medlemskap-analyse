@@ -40,12 +40,8 @@ export async function POST(request: NextRequest) {
 
     try {
         const config = await loadConfig()
-        const MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT = config.MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT
-
-        if (!MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT) {
-            console.error("MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT ikke funnet i config. Tilgjengelige keys:", Object.keys(config))
-            return new NextResponse(JSON.stringify({ error: "Konfigurasjonsfeil" }), { status: 500 })
-        }
+        const SYKEPENGER_API_BASE_URL = config.SYKEPENGER_API_BASE_URL
+        const SYKEPENGER_CLIENT = config.SYKEPENGER_CLIENT
 
         const body = await request.json()
         const fnr = body.fnr
@@ -69,13 +65,12 @@ export async function POST(request: NextRequest) {
             return new NextResponse(null, { status: 401 })
         }
 
-        const oboToken = await requestAzureOboToken(token, MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT)
+        const oboToken = await requestAzureOboToken(token, SYKEPENGER_CLIENT)
         if (!oboToken.ok) {
-            console.error("OBO token feilet for client:", MEDLEMSKAP_VURDERING_SYKEPENGER_CLIENT, "Error:", oboToken.error)
-            throw new Error(`Tokenfeil: ${oboToken.error}`)
+            throw new Error("Tokenfeil: OBO token var null")
         }
 
-        const backendUrl = "https://medlemskap-vurdering-sykepenger.intern.dev.nav.no/test/slett-brukersvar"
+        const backendUrl = `${SYKEPENGER_API_BASE_URL}/test/slett-brukersvar`
 
         const response = await fetch(backendUrl, {
             method: "POST",
