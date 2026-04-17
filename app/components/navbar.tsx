@@ -19,7 +19,10 @@ export function Navbar() {
     const links = [
         { href: "/analyse", label: "Analyse" },
         { href: "/testing", label: "Testing" },
-        ...(isDev ? [{ href: "/nullstilling", label: "Nullstilling" }] : []),
+        ...(isDev ? [
+            { href: "/nullstilling", label: "Nullstilling" },
+            { href: "/publiser", label: "Publiser" },
+        ] : []),
     ]
 
     return (
