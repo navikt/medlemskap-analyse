@@ -7,19 +7,21 @@ import "./navbar.css"
 
 export function Navbar() {
     const pathname = usePathname()
-    const [isDev, setIsDev] = useState(false)
+    const [isDev, setIsDev] = useState<boolean | null>(null)
 
     useEffect(() => {
-        fetch("/api/check-env")
-            .then((res) => res.json())
-            .then((data) => setIsDev(data.isDev))
-            .catch(() => setIsDev(false))
-    }, [])
+        if (isDev === null) {
+            fetch("/api/check-env")
+                .then((res) => res.json())
+                .then((data) => setIsDev(data.isDev))
+                .catch(() => setIsDev(false))
+        }
+    }, [isDev])
 
     const links = [
         { href: "/analyse", label: "Analyse" },
         { href: "/testing", label: "Testing" },
-        ...(isDev ? [
+        ...(isDev === true ? [
             { href: "/nullstilling", label: "Nullstilling" },
             { href: "/publiser", label: "Publiser" },
         ] : []),
