@@ -202,7 +202,7 @@ export default function PubliserPage() {
 
     return (
         <div className="container">
-            <h1>Publiser Sykepengesoknad</h1>
+            <h1>Publiser Sykepengesøknad</h1>
             <p className="warning-text">Kun tilgjengelig i dev. Publiserer en testmelding til medlemskap-sykepenger-listener.</p>
 
             <div className="options-card">
