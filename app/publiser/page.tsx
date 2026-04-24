@@ -11,6 +11,8 @@ import utfortArbeidUtenforNorgeJa from "../../data/utfort-arbeid-utenfor-norge-j
 import utfortArbeidUtenforNorgeNei from "../../data/utfort-arbeid-utenfor-norge-nei.json"
 import oppholdstillatelseJa from "../../data/oppholdstillatelse-ja.json"
 import oppholdstillatelseNei from "../../data/oppholdstillatelse-nei.json"
+import oppholdUtenforNorgeJa from "../../data/opphold-utenfor-norge-ja.json"
+import oppholdUtenforNorgeNei from "../../data/opphold-utenfor-norge-nei.json"
 
 type Selection = {
     enabled: boolean
@@ -22,6 +24,7 @@ type Selections = {
     utfortArbeidUtenforNorge: Selection
     oppholdUtenforEOS: Selection
     oppholdstillatelse: Selection
+    oppholdUtenforNorge: Selection
 }
 
 const jsonTemplates = {
@@ -41,6 +44,10 @@ const jsonTemplates = {
         JA: oppholdstillatelseJa,
         NEI: oppholdstillatelseNei,
     },
+    oppholdUtenforNorge: {
+        JA: oppholdUtenforNorgeJa,
+        NEI: oppholdUtenforNorgeNei,
+    },
 }
 
 export default function PubliserPage() {
@@ -50,6 +57,7 @@ export default function PubliserPage() {
         utfortArbeidUtenforNorge: { enabled: false, answer: null },
         oppholdUtenforEOS: { enabled: false, answer: null },
         oppholdstillatelse: { enabled: false, answer: null },
+        oppholdUtenforNorge: { enabled: false, answer: null },
     })
 
     const [fnr, setFnr] = useState("")
@@ -109,6 +117,11 @@ export default function PubliserPage() {
 
         if (selections.oppholdstillatelse.enabled && selections.oppholdstillatelse.answer) {
             const template = jsonTemplates.oppholdstillatelse[selections.oppholdstillatelse.answer]
+            sporsmal.push(...template.sporsmal)
+        }
+
+        if (selections.oppholdUtenforNorge.enabled && selections.oppholdUtenforNorge.answer) {
+            const template = jsonTemplates.oppholdUtenforNorge[selections.oppholdUtenforNorge.answer]
             sporsmal.push(...template.sporsmal)
         }
 
@@ -184,11 +197,12 @@ export default function PubliserPage() {
         utfortArbeidUtenforNorge: "Utfort arbeid utenfor Norge",
         oppholdUtenforEOS: "Opphold utenfor EOS",
         oppholdstillatelse: "Oppholdstillatelse",
+        oppholdUtenforNorge: "Opphold utenfor Norge",
     }
 
     return (
         <div className="container">
-            <h1>Publiser Sykepengesoknad</h1>
+            <h1>Publiser Sykepengesøknad</h1>
             <p className="warning-text">Kun tilgjengelig i dev. Publiserer en testmelding til medlemskap-sykepenger-listener.</p>
 
             <div className="options-card">

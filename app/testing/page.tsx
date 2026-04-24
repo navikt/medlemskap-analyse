@@ -11,6 +11,8 @@ import utfortArbeidUtenforNorgeJa from "../../data/utfort-arbeid-utenfor-norge-j
 import utfortArbeidUtenforNorgeNei from "../../data/utfort-arbeid-utenfor-norge-nei.json"
 import oppholdstillatelseJa from "../../data/oppholdstillatelse-ja.json"
 import oppholdstillatelseNei from "../../data/oppholdstillatelse-nei.json"
+import oppholdUtenforNorgeJa from "../../data/opphold-utenfor-norge-ja.json"
+import oppholdUtenforNorgeNei from "../../data/opphold-utenfor-norge-nei.json"
 
 type Selection = {
     enabled: boolean
@@ -22,6 +24,7 @@ type Selections = {
     utfortArbeidUtenforNorge: Selection
     oppholdUtenforEOS: Selection
     oppholdstillatelse: Selection
+    oppholdUtenforNorge: Selection
 }
 
 const jsonTemplates = {
@@ -41,6 +44,10 @@ const jsonTemplates = {
         JA: oppholdstillatelseJa,
         NEI: oppholdstillatelseNei,
     },
+    oppholdUtenforNorge: {
+        JA: oppholdUtenforNorgeJa,
+        NEI: oppholdUtenforNorgeNei,
+    },
 }
 
 export default function TestingPage() {
@@ -49,6 +56,7 @@ export default function TestingPage() {
         utfortArbeidUtenforNorge: { enabled: false, answer: null },
         oppholdUtenforEOS: { enabled: false, answer: null },
         oppholdstillatelse: { enabled: false, answer: null },
+        oppholdUtenforNorge: { enabled: false, answer: null },
     })
 
     const [generatedJson, setGeneratedJson] = useState<string>("")
@@ -113,6 +121,11 @@ export default function TestingPage() {
             sporsmal.push(...template.sporsmal)
         }
 
+        if (selections.oppholdUtenforNorge.enabled && selections.oppholdUtenforNorge.answer) {
+            const template = jsonTemplates.oppholdUtenforNorge[selections.oppholdUtenforNorge.answer]
+            sporsmal.push(...template.sporsmal)
+        }
+
         const result = {
             id: "52041604-a94a-38ca-b7a6-3e913b5207fa",
             type: "ARBEIDSTAKERE",
@@ -139,6 +152,7 @@ export default function TestingPage() {
         utfortArbeidUtenforNorge: "Utfort arbeid utenfor Norge",
         oppholdUtenforEOS: "Opphold utenfor EOS",
         oppholdstillatelse: "Oppholdstillatelse",
+        oppholdUtenforNorge: "Opphold utenfor Norge",
     }
 
     return (
