@@ -16,7 +16,7 @@ COPY data data
 
 RUN npm run build
 
-FROM --platform=linux/amd64 gcr.io/distroless/nodejs20-debian12@sha256:aadeb54a6d25fa4f8c47160ca38cfdc2ff7a6227b5d41c8544f9cffb80a31823 AS runtime
+FROM --platform=linux/amd64 europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:20-slim@sha256:217c47ea627c17fa51c83af4332619fa125dff6df1cbd9221ed4425cc1dd7c27 AS runtime
 
 WORKDIR /app
 
