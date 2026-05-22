@@ -13,17 +13,24 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           persist-credentials: false
-      - name: Build static files
-        uses: docker/build-push-action@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          target: export
-          outputs: type=local,dest=static
-          secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
+          node-version: "20"
+      - name: Install dependencies
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken $NODE_AUTH_TOKEN
+          npm config set @navikt:registry=https://npm.pkg.github.com
+          npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - name: Build
+        run: npm run build
       - name: Upload static files to NAV CDN
         uses: nais/deploy/actions/cdn-upload/v2@master
         with:
           team: medlemskap
-          source: ./static
+          source: ./.next/static
           destination: "/_next"
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
@@ -35,7 +42,6 @@ jobs:
           team: medlemskap
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
       - name: Deploy to nais
         uses: nais/deploy/actions/deploy@v2
         env:
