@@ -1,4 +1,5 @@
-FROM node:20@sha256:fd0115473b293460df5b217ea73ff216928f2b0bb7650c5e7aa56aae4c028426 AS builder
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:20-dev@sha256:9e1b9bcea61579b6282e6adeaae8ab00fa05a89ee906e5f70d1d40785527c741 AS builder
+
 
 WORKDIR /app
 
