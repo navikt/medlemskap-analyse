@@ -92,7 +92,7 @@ export default function NullstillingPage() {
         <div className="container">
             <h1>Nullstilling</h1>
             <p className="warning-text">
-                Advarsel: Disse handlingene sletter data i databasen. Kun tilgjengelig i dev-miljo.
+                Advarsel: Disse handlingene sletter data i databasen. Kun tilgjengelig i dev-miljø.
             </p>
 
             <div className="options-card">
