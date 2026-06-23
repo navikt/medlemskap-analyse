@@ -9,12 +9,18 @@ interface SlettVurderingResponse {
     slettetVurderingAnalyse: number
 }
 
+interface SlettBrukersvarResponse {
+    fnr: string
+    slettetBrukersvar: number
+    slettetVurderingsstatuser: number
+}
+
 export function NullstillingPanel() {
     const [fnr, setFnr] = useState("")
     const [isLoading1, setIsLoading1] = useState(false)
     const [isLoading2, setIsLoading2] = useState(false)
     const [result1, setResult1] = useState<{ success: boolean; message: string; data?: SlettVurderingResponse } | null>(null)
-    const [result2, setResult2] = useState<{ success: boolean; message: string } | null>(null)
+    const [result2, setResult2] = useState<{ success: boolean; message: string; data?: SlettBrukersvarResponse } | null>(null)
 
     const isValidFnr = fnr.trim().length === 11
 
@@ -56,7 +62,12 @@ export function NullstillingPanel() {
                 body: JSON.stringify({ fnr: fnr.trim() }),
             })
             if (response.ok) {
-                setResult2({ success: true, message: "Brukersvar slettet" })
+                const data: SlettBrukersvarResponse = await response.json()
+                setResult2({
+                    success: true,
+                    message: `Slettet ${data.slettetBrukersvar} brukersvar og ${data.slettetVurderingsstatuser} vurderingsstatuser`,
+                    data,
+                })
             } else {
                 setResult2({ success: false, message: `Feil: ${response.status}` })
             }
