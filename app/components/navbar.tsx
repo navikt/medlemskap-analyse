@@ -15,7 +15,7 @@ export function Navbar() {
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <span className="navbar-brand">Medlemskap</span>
+                <span className="navbar-brand">LovMe</span>
                 <div className="navbar-links">
                     {links.map((link) => (
                         <Link
