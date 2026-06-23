@@ -10,6 +10,9 @@ export default function Home() {
                 <Link href="/analyse" className="home-button primary">
                     Gå til Analyse
                 </Link>
+                <Link href="/testrammeverk" className="home-button secondary">
+                    Gå til Testrammeverk
+                </Link>
             </div>
         </main>
     )
