@@ -50,7 +50,7 @@ export function BrukersporsmalPanel() {
             <div className="options-card">
                 <div className="form-group">
                     <label className="form-label" htmlFor="fnr-brukersporsmal">
-                        Fodselsnummer (11 siffer) *
+                        Fødselsnummer (11 siffer) *
                     </label>
                     <input
                         type="text"
@@ -61,7 +61,7 @@ export function BrukersporsmalPanel() {
                         placeholder="12345678912"
                         maxLength={11}
                     />
-                    {fnr && !isValidFnr && <p className="error-message">Fodselsnummer ma vare 11 siffer</p>}
+                    {fnr && !isValidFnr && <p className="error-message">Fødselsnummer må være 11 siffer</p>}
                 </div>
 
                 <div className="form-row">
@@ -95,9 +95,9 @@ export function BrukersporsmalPanel() {
 
             <div className="options-card">
                 <div className="nullstill-section">
-                    <h2>Anbefalte sporsmal</h2>
-                    <p>Henter det anbefalte sporsmalssettet fra medlemskap-vurdering-sykepenger for oppgitt periode.</p>
-                    <button onClick={handleHent} disabled={isLoading || !isFormValid} className="generate-button">
+                    <h2>Anbefalte spørsmål</h2>
+                    <p>Henter det anbefalte spørsmålssettet fra medlemskap-vurdering-sykepenger for oppgitt periode.</p>
+                    <button onClick={handleHent} disabled={isLoading || !isFormValid} className="publish-button">
                         {isLoading ? "Henter..." : "Hent anbefalte sporsmal"}
                     </button>
 
