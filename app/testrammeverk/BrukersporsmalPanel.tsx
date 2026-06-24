@@ -29,11 +29,8 @@ export function BrukersporsmalPanel() {
         setIsLoading(true)
         setResult(null)
         try {
-            const response = await fetch(`/api/brukersporsmal?fom=${fom}&tom=${tom}`, {
+            const response = await fetch(`/api/brukersporsmal?fnr=${fnr.trim()}&fom=${fom}&tom=${tom}`, {
                 method: "GET",
-                headers: {
-                    fnr: fnr.trim(),
-                },
             })
             if (response.ok) {
                 const data: BrukersporsmalResponse = await response.json()
@@ -98,8 +95,8 @@ export function BrukersporsmalPanel() {
 
             <div className="options-card">
                 <div className="nullstill-section">
-                    <h2>Anbefalte spørsmal</h2>
-                    <p>Henter det anbefalte spørsmalssettet fra medlemskap-vurdering-sykepenger for oppgitt periode.</p>
+                    <h2>Anbefalte sporsmal</h2>
+                    <p>Henter det anbefalte sporsmalssettet fra medlemskap-vurdering-sykepenger for oppgitt periode.</p>
                     <button onClick={handleHent} disabled={isLoading || !isFormValid} className="generate-button">
                         {isLoading ? "Henter..." : "Hent anbefalte sporsmal"}
                     </button>

@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url)
         const fom = searchParams.get("fom")
         const tom = searchParams.get("tom")
-        const fnr = request.headers.get("fnr")
+        const fnr = searchParams.get("fnr")
 
         const datoRegex = /^\d{4}-\d{2}-\d{2}$/
 
