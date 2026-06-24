@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react"
 import { PubliserPanel } from "./PubliserPanel"
 import { NullstillingPanel } from "./NullstillingPanel"
+import { BrukersporsmalPanel } from "./BrukersporsmalPanel"
 import "./page.css"
 
-type Tab = "publiser" | "nullstilling"
+type Tab = "publiser" | "nullstilling" | "brukersporsmal"
 
 export default function TestrammeverkPage() {
     const [isDev, setIsDev] = useState<boolean | null>(null)
@@ -25,7 +26,7 @@ export default function TestrammeverkPage() {
             </div>
         )
     }
-//
+
     if (!isDev) {
         return (
             <div className="container">
@@ -56,10 +57,20 @@ export default function TestrammeverkPage() {
                 >
                     Nullstilling
                 </button>
+                <button
+                    role="tab"
+                    aria-selected={activeTab === "brukersporsmal"}
+                    className={`tab ${activeTab === "brukersporsmal" ? "active" : ""}`}
+                    onClick={() => setActiveTab("brukersporsmal")}
+                >
+                    Brukersporsmal
+                </button>
             </div>
 
             <div className="tab-panel">
-                {activeTab === "publiser" ? <PubliserPanel /> : <NullstillingPanel />}
+                {activeTab === "publiser" && <PubliserPanel />}
+                {activeTab === "nullstilling" && <NullstillingPanel />}
+                {activeTab === "brukersporsmal" && <BrukersporsmalPanel />}
             </div>
         </div>
     )
