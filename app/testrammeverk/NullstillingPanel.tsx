@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { notFound } from "next/navigation"
+import { useState } from "react"
 import "./page.css"
 
 interface SlettVurderingResponse {
@@ -10,32 +9,18 @@ interface SlettVurderingResponse {
     slettetVurderingAnalyse: number
 }
 
-export default function NullstillingPage() {
+interface SlettBrukersvarResponse {
+    fnr: string
+    slettetBrukersvar: number
+    slettetVurderingsstatuser: number
+}
+
+export function NullstillingPanel() {
     const [fnr, setFnr] = useState("")
     const [isLoading1, setIsLoading1] = useState(false)
     const [isLoading2, setIsLoading2] = useState(false)
     const [result1, setResult1] = useState<{ success: boolean; message: string; data?: SlettVurderingResponse } | null>(null)
-    const [result2, setResult2] = useState<{ success: boolean; message: string } | null>(null)
-    const [isDev, setIsDev] = useState<boolean | null>(null)
-
-    useEffect(() => {
-        fetch("/api/check-env")
-            .then((res) => res.json())
-            .then((data) => setIsDev(data.isDev))
-            .catch(() => setIsDev(false))
-    }, [])
-
-    if (isDev === null) {
-        return (
-            <div className="container">
-                <p>Laster...</p>
-            </div>
-        )
-    }
-
-    if (!isDev) {
-        notFound()
-    }
+    const [result2, setResult2] = useState<{ success: boolean; message: string; data?: SlettBrukersvarResponse } | null>(null)
 
     const isValidFnr = fnr.trim().length === 11
 
@@ -77,7 +62,12 @@ export default function NullstillingPage() {
                 body: JSON.stringify({ fnr: fnr.trim() }),
             })
             if (response.ok) {
-                setResult2({ success: true, message: "Brukersvar slettet" })
+                const data: SlettBrukersvarResponse = await response.json()
+                setResult2({
+                    success: true,
+                    message: `Slettet ${data.slettetBrukersvar} brukersvar og ${data.slettetVurderingsstatuser} vurderingsstatuser`,
+                    data,
+                })
             } else {
                 setResult2({ success: false, message: `Feil: ${response.status}` })
             }
@@ -89,29 +79,26 @@ export default function NullstillingPage() {
     }
 
     return (
-        <div className="container">
-            <h1>Nullstilling</h1>
-            <p className="warning-text">
-                Advarsel: Disse handlingene sletter data i databasen. Kun tilgjengelig i dev-miljø.
+        <div>
+            <p className="warning-text danger">
+                Advarsel: Disse handlingene sletter data i databasen.
             </p>
 
             <div className="options-card">
                 <div className="form-group">
-                    <label className="form-label" htmlFor="fnr">
+                    <label className="form-label" htmlFor="fnr-nullstill">
                         Fodselsnummer (11 siffer) *
                     </label>
                     <input
                         type="text"
-                        id="fnr"
+                        id="fnr-nullstill"
                         className="form-input"
                         value={fnr}
                         onChange={(e) => setFnr(e.target.value)}
                         placeholder="12345678912"
                         maxLength={11}
                     />
-                    {fnr && !isValidFnr && (
-                        <p className="error-message">Fodselsnummer ma vare 11 siffer</p>
-                    )}
+                    {fnr && !isValidFnr && <p className="error-message">Fodselsnummer ma vare 11 siffer</p>}
                 </div>
             </div>
 
@@ -127,9 +114,7 @@ export default function NullstillingPage() {
                         {isLoading1 ? "Sletter..." : "Slett vurderinger"}
                     </button>
                     {result1 && (
-                        <p className={result1.success ? "success-message" : "error-message"}>
-                            {result1.message}
-                        </p>
+                        <p className={result1.success ? "success-message" : "error-message"}>{result1.message}</p>
                     )}
                 </div>
 
@@ -144,9 +129,7 @@ export default function NullstillingPage() {
                         {isLoading2 ? "Sletter..." : "Slett brukersvar"}
                     </button>
                     {result2 && (
-                        <p className={result2.success ? "success-message" : "error-message"}>
-                            {result2.message}
-                        </p>
+                        <p className={result2.success ? "success-message" : "error-message"}>{result2.message}</p>
                     )}
                 </div>
             </div>

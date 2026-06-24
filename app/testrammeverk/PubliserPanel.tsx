@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import "./page.css"
 
 import arbeidUtenforNorgeGammeltJa from "../../data/arbeid-utenfor-norge-gammelt-ja.json"
@@ -50,8 +50,15 @@ const jsonTemplates = {
     },
 }
 
-export default function PubliserPage() {
-    const [isDev, setIsDev] = useState<boolean | null>(null)
+const labels: Record<keyof Selections, string> = {
+    arbeidUtenforNorgeGammelt: "Arbeid utenfor Norge (gammelt)",
+    utfortArbeidUtenforNorge: "Utfort arbeid utenfor Norge",
+    oppholdUtenforEOS: "Opphold utenfor EOS",
+    oppholdstillatelse: "Oppholdstillatelse",
+    oppholdUtenforNorge: "Opphold utenfor Norge",
+}
+
+export function PubliserPanel() {
     const [selections, setSelections] = useState<Selections>({
         arbeidUtenforNorgeGammelt: { enabled: false, answer: null },
         utfortArbeidUtenforNorge: { enabled: false, answer: null },
@@ -67,13 +74,6 @@ export default function PubliserPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [result, setResult] = useState<{ success: boolean; message: string } | null>(null)
     const [generatedJson, setGeneratedJson] = useState<string>("")
-
-    useEffect(() => {
-        fetch("/api/check-env")
-            .then((res) => res.json())
-            .then((data) => setIsDev(data.isDev))
-            .catch(() => setIsDev(false))
-    }, [])
 
     const handleCheckboxChange = (key: keyof Selections) => {
         setSelections((prev) => ({
@@ -179,31 +179,11 @@ export default function PubliserPage() {
         }
     }
 
-    if (isDev === null) {
-        return <div className="container"><p>Laster...</p></div>
-    }
-
-    if (!isDev) {
-        return (
-            <div className="container">
-                <h1>404</h1>
-                <p>Denne siden finnes ikke.</p>
-            </div>
-        )
-    }
-
-    const labels: Record<keyof Selections, string> = {
-        arbeidUtenforNorgeGammelt: "Arbeid utenfor Norge (gammelt)",
-        utfortArbeidUtenforNorge: "Utfort arbeid utenfor Norge",
-        oppholdUtenforEOS: "Opphold utenfor EOS",
-        oppholdstillatelse: "Oppholdstillatelse",
-        oppholdUtenforNorge: "Opphold utenfor Norge",
-    }
-
     return (
-        <div className="container">
-            <h1>Publiser Sykepengesøknad</h1>
-            <p className="warning-text">Kun tilgjengelig i dev. Publiserer en testmelding til medlemskap-sykepenger-listener.</p>
+        <div>
+            <p className="warning-text">
+                Publiserer en testmelding til medlemskap-sykepenger-listener.
+            </p>
 
             <div className="options-card">
                 <div className="options-title">Personopplysninger</div>
@@ -269,10 +249,7 @@ export default function PubliserPage() {
                 <div className="options-title">Velg sporsmal</div>
 
                 {(Object.keys(selections) as Array<keyof Selections>).map((key) => (
-                    <div
-                        key={key}
-                        className={`option-item ${selections[key].enabled ? "selected" : ""}`}
-                    >
+                    <div key={key} className={`option-item ${selections[key].enabled ? "selected" : ""}`}>
                         <label className="option-label">
                             <input
                                 type="checkbox"
@@ -309,26 +286,16 @@ export default function PubliserPage() {
             </div>
 
             <div className="button-row">
-                <button
-                    onClick={handleGeneratePreview}
-                    className="preview-button"
-                    disabled={!isFormValid}
-                >
+                <button onClick={handleGeneratePreview} className="preview-button" disabled={!isFormValid}>
                     Forhandsvis JSON
                 </button>
-                <button
-                    onClick={handlePubliser}
-                    className="publish-button"
-                    disabled={!isFormValid || isLoading}
-                >
+                <button onClick={handlePubliser} className="publish-button" disabled={!isFormValid || isLoading}>
                     {isLoading ? "Publiserer..." : "Publiser"}
                 </button>
             </div>
 
             {result && (
-                <div className={`result-message ${result.success ? "success" : "error"}`}>
-                    {result.message}
-                </div>
+                <div className={`result-message ${result.success ? "success" : "error"}`}>{result.message}</div>
             )}
 
             {generatedJson && (

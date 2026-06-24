@@ -2,34 +2,20 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
 import "./navbar.css"
 
 export function Navbar() {
     const pathname = usePathname()
-    const [isDev, setIsDev] = useState<boolean | null>(null)
-
-    useEffect(() => {
-        if (isDev === null) {
-            fetch("/api/check-env")
-                .then((res) => res.json())
-                .then((data) => setIsDev(data.isDev))
-                .catch(() => setIsDev(false))
-        }
-    }, [isDev])
 
     const links = [
         { href: "/analyse", label: "Analyse" },
-        ...(isDev === true ? [
-            { href: "/nullstilling", label: "Nullstilling" },
-            { href: "/publiser", label: "Publiser" },
-        ] : []),
+        { href: "/testrammeverk", label: "Testrammeverk" },
     ]
 
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <span className="navbar-brand">Medlemskap</span>
+                <span className="navbar-brand">LovMe</span>
                 <div className="navbar-links">
                     {links.map((link) => (
                         <Link

@@ -1,17 +1,24 @@
 .container {
     max-width: 600px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .controls {
     display: flex;
     gap: 1rem;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .controls select {
@@ -41,6 +48,8 @@ h1 {
     background-color: #d4edda;
     color: #155724;
     border-radius: 4px;
+    text-align: center;
+    width: 100%;
 }
 
 .success-message {
@@ -49,6 +58,7 @@ h1 {
     border-radius: 8px;
     padding: 2rem;
     text-align: center;
+    width: 100%;
 }
 
 .success-message h2 {
