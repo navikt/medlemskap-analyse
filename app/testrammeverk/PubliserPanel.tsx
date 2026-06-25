@@ -71,6 +71,7 @@ export function PubliserPanel() {
     const [fom, setFom] = useState("")
     const [tom, setTom] = useState("")
     const [startSyketilfelle, setStartSyketilfelle] = useState("")
+    const [forstegangssoknad, setForstegangssoknad] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [result, setResult] = useState<{ success: boolean; message: string } | null>(null)
     const [generatedJson, setGeneratedJson] = useState<string>("")
@@ -138,7 +139,7 @@ export function PubliserPanel() {
             dodsdato: null,
             ettersending: false,
             arbeidUtenforNorge: false,
-            forstegangssoknad: true,
+            forstegangssoknad: forstegangssoknad,
             korrigerer: null,
             sporsmal,
         }
@@ -241,6 +242,30 @@ export function PubliserPanel() {
                             value={startSyketilfelle}
                             onChange={(e) => setStartSyketilfelle(e.target.value)}
                         />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label className="form-label">Forstegangssoknad</label>
+                    <div className="radio-group">
+                        <label className="radio-label">
+                            <input
+                                type="radio"
+                                name="forstegangssoknad"
+                                checked={forstegangssoknad === true}
+                                onChange={() => setForstegangssoknad(true)}
+                            />
+                            <span>true</span>
+                        </label>
+                        <label className="radio-label">
+                            <input
+                                type="radio"
+                                name="forstegangssoknad"
+                                checked={forstegangssoknad === false}
+                                onChange={() => setForstegangssoknad(false)}
+                            />
+                            <span>false</span>
+                        </label>
                     </div>
                 </div>
             </div>
