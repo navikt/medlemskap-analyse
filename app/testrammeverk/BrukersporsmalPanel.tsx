@@ -96,9 +96,9 @@ export function BrukersporsmalPanel() {
             <div className="options-card">
                 <div className="nullstill-section">
                     <h2>Anbefalte spørsmål</h2>
-                    <p>Henter det anbefalte spørsmålssettet fra medlemskap-vurdering-sykepenger for oppgitt periode.</p>
+                    <p>Genererer og viser anbefalte brukerspørsmål for en gitt person og sykmeldingsperiode.</p>
                     <button onClick={handleHent} disabled={isLoading || !isFormValid} className="publish-button">
-                        {isLoading ? "Henter..." : "Hent anbefalte sporsmal"}
+                        {isLoading ? "Henter..." : "Hent anbefalte spørsmål"}
                     </button>
 
                     {result && !result.success && <p className="error-message">{result.message}</p>}
@@ -113,7 +113,7 @@ export function BrukersporsmalPanel() {
                             </div>
 
                             <div className="brukersporsmal-row">
-                                <span className="brukersporsmal-label">Anbefalte sporsmal</span>
+                                <span className="brukersporsmal-label">Anbefalte spørsmål</span>
                                 {result.data.sporsmal.length > 0 ? (
                                     <ul className="brukersporsmal-list">
                                         {result.data.sporsmal.map((s) => (
@@ -121,7 +121,7 @@ export function BrukersporsmalPanel() {
                                         ))}
                                     </ul>
                                 ) : (
-                                    <span className="brukersporsmal-empty">Ingen sporsmal anbefalt</span>
+                                    <span className="brukersporsmal-empty">Ingen spørsmål anbefalt</span>
                                 )}
                             </div>
 

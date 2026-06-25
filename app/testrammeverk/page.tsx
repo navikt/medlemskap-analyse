@@ -10,7 +10,7 @@ type Tab = "publiser" | "nullstilling" | "brukersporsmal"
 
 export default function TestrammeverkPage() {
     const [isDev, setIsDev] = useState<boolean | null>(null)
-    const [activeTab, setActiveTab] = useState<Tab>("publiser")
+    const [activeTab, setActiveTab] = useState<Tab>("brukersporsmal")
 
     useEffect(() => {
         fetch("/api/check-env")
@@ -31,7 +31,7 @@ export default function TestrammeverkPage() {
         return (
             <div className="container">
                 <h1>Testrammeverk</h1>
-                <p className="info-text">Testrammeverket er kun tilgjengelig i dev-miljo.</p>
+                <p className="info-text">Testrammeverket er kun tilgjengelig i dev-miljø.</p>
             </div>
         )
     }
@@ -41,6 +41,14 @@ export default function TestrammeverkPage() {
             <h1>Testrammeverk</h1>
 
             <div className="tabs" role="tablist">
+                <button
+                    role="tab"
+                    aria-selected={activeTab === "brukersporsmal"}
+                    className={`tab ${activeTab === "brukersporsmal" ? "active" : ""}`}
+                    onClick={() => setActiveTab("brukersporsmal")}
+                >
+                    Brukerspørsmål
+                </button>
                 <button
                     role="tab"
                     aria-selected={activeTab === "publiser"}
@@ -56,14 +64,6 @@ export default function TestrammeverkPage() {
                     onClick={() => setActiveTab("nullstilling")}
                 >
                     Nullstilling
-                </button>
-                <button
-                    role="tab"
-                    aria-selected={activeTab === "brukersporsmal"}
-                    className={`tab ${activeTab === "brukersporsmal" ? "active" : ""}`}
-                    onClick={() => setActiveTab("brukersporsmal")}
-                >
-                    Brukersporsmal
                 </button>
             </div>
 
