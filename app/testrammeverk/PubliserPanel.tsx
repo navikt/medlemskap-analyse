@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import "./page.css"
 
 import arbeidUtenforNorgeGammeltJa from "../../data/arbeid-utenfor-norge-gammelt-ja.json"
@@ -71,9 +71,11 @@ export function PubliserPanel() {
     const [fom, setFom] = useState("")
     const [tom, setTom] = useState("")
     const [startSyketilfelle, setStartSyketilfelle] = useState("")
+    const [forstegangssoknad, setForstegangssoknad] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [result, setResult] = useState<{ success: boolean; message: string } | null>(null)
-    const [generatedJson, setGeneratedJson] = useState<string>("")
+    const [soknadId] = useState(() => crypto.randomUUID())
+    const [sendtArbeidsgiver] = useState(() => new Date().toISOString().replace("Z", ""))
 
     const handleCheckboxChange = (key: keyof Selections) => {
         setSelections((prev) => ({
@@ -126,29 +128,28 @@ export function PubliserPanel() {
         }
 
         return {
-            id: crypto.randomUUID(),
+            id: soknadId,
             type: "ARBEIDSTAKERE",
             status: "SENDT",
             fnr: fnr.trim(),
             fom: fom,
             tom: tom,
             startSyketilfelle: startSyketilfelle,
-            sendtArbeidsgiver: new Date().toISOString().replace("Z", ""),
+            sendtArbeidsgiver: sendtArbeidsgiver,
             sendtNav: null,
             dodsdato: null,
             ettersending: false,
             arbeidUtenforNorge: false,
-            forstegangssoknad: true,
+            forstegangssoknad: forstegangssoknad,
             korrigerer: null,
             sporsmal,
         }
     }
 
-    const handleGeneratePreview = () => {
-        if (!isFormValid) return
-        const payload = buildPayload()
-        setGeneratedJson(JSON.stringify(payload, null, 2))
-    }
+    const previewJson = useMemo(
+        () => JSON.stringify(buildPayload(), null, 2),
+        [selections, fnr, fom, tom, startSyketilfelle, forstegangssoknad, soknadId, sendtArbeidsgiver],
+    )
 
     const handlePubliser = async () => {
         if (!isFormValid) return
@@ -157,7 +158,6 @@ export function PubliserPanel() {
         setResult(null)
 
         const payload = buildPayload()
-        setGeneratedJson(JSON.stringify(payload, null, 2))
 
         try {
             const response = await fetch("/api/publiser/sykepengesoknad", {
@@ -243,6 +243,30 @@ export function PubliserPanel() {
                         />
                     </div>
                 </div>
+
+                <div className="form-group">
+                    <label className="form-label">Forstegangssoknad</label>
+                    <div className="radio-group">
+                        <label className="radio-label">
+                            <input
+                                type="radio"
+                                name="forstegangssoknad"
+                                checked={forstegangssoknad === true}
+                                onChange={() => setForstegangssoknad(true)}
+                            />
+                            <span>true</span>
+                        </label>
+                        <label className="radio-label">
+                            <input
+                                type="radio"
+                                name="forstegangssoknad"
+                                checked={forstegangssoknad === false}
+                                onChange={() => setForstegangssoknad(false)}
+                            />
+                            <span>false</span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <div className="options-card">
@@ -286,9 +310,6 @@ export function PubliserPanel() {
             </div>
 
             <div className="button-row">
-                <button onClick={handleGeneratePreview} className="preview-button" disabled={!isFormValid}>
-                    Forhandsvis JSON
-                </button>
                 <button onClick={handlePubliser} className="publish-button" disabled={!isFormValid || isLoading}>
                     {isLoading ? "Publiserer..." : "Publiser"}
                 </button>
@@ -298,12 +319,10 @@ export function PubliserPanel() {
                 <div className={`result-message ${result.success ? "success" : "error"}`}>{result.message}</div>
             )}
 
-            {generatedJson && (
-                <div className="result-section">
-                    <h2>JSON som sendes:</h2>
-                    <pre className="json-output">{generatedJson}</pre>
-                </div>
-            )}
+            <div className="result-section">
+                <h2>JSON som sendes:</h2>
+                <pre className="json-output">{previewJson}</pre>
+            </div>
         </div>
     )
 }

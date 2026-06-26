@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react"
 import { PubliserPanel } from "./PubliserPanel"
 import { NullstillingPanel } from "./NullstillingPanel"
+import { BrukersporsmalPanel } from "./BrukersporsmalPanel"
 import "./page.css"
 
-type Tab = "publiser" | "nullstilling"
+type Tab = "publiser" | "nullstilling" | "brukersporsmal"
 
 export default function TestrammeverkPage() {
     const [isDev, setIsDev] = useState<boolean | null>(null)
-    const [activeTab, setActiveTab] = useState<Tab>("publiser")
+    const [activeTab, setActiveTab] = useState<Tab>("brukersporsmal")
 
     useEffect(() => {
         fetch("/api/check-env")
@@ -25,12 +26,12 @@ export default function TestrammeverkPage() {
             </div>
         )
     }
-//
+
     if (!isDev) {
         return (
             <div className="container">
                 <h1>Testrammeverk</h1>
-                <p className="info-text">Testrammeverket er kun tilgjengelig i dev-miljo.</p>
+                <p className="info-text">Testrammeverket er kun tilgjengelig i dev-miljø.</p>
             </div>
         )
     }
@@ -40,6 +41,14 @@ export default function TestrammeverkPage() {
             <h1>Testrammeverk</h1>
 
             <div className="tabs" role="tablist">
+                <button
+                    role="tab"
+                    aria-selected={activeTab === "brukersporsmal"}
+                    className={`tab ${activeTab === "brukersporsmal" ? "active" : ""}`}
+                    onClick={() => setActiveTab("brukersporsmal")}
+                >
+                    Brukerspørsmål
+                </button>
                 <button
                     role="tab"
                     aria-selected={activeTab === "publiser"}
@@ -59,7 +68,9 @@ export default function TestrammeverkPage() {
             </div>
 
             <div className="tab-panel">
-                {activeTab === "publiser" ? <PubliserPanel /> : <NullstillingPanel />}
+                {activeTab === "publiser" && <PubliserPanel />}
+                {activeTab === "nullstilling" && <NullstillingPanel />}
+                {activeTab === "brukersporsmal" && <BrukersporsmalPanel />}
             </div>
         </div>
     )
