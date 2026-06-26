@@ -139,7 +139,9 @@ export function PubliserPanel() {
             sendtNav: null,
             dodsdato: null,
             ettersending: false,
-            arbeidUtenforNorge: false,
+            arbeidUtenforNorge:
+                selections.arbeidUtenforNorgeGammelt.enabled &&
+                selections.arbeidUtenforNorgeGammelt.answer === "JA",
             forstegangssoknad: forstegangssoknad,
             korrigerer: null,
             sporsmal,
