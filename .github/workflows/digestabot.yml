@@ -12,15 +12,15 @@ jobs:
       id-token: write
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411
         with:
           egress-policy: audit
       - name: Checkout repository
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           persist-credentials: false
       - name: Run Digestabot
-        uses: navikt/digestabot@e4b413f1eed3c97f7fd4ffa1d05204de9944d0a9
+        uses: navikt/digestabot@3302a753e533ceb9ec216de7f78345436cd636e3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           team: medlemskap
