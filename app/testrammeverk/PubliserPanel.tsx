@@ -74,7 +74,7 @@ export function PubliserPanel() {
     const [forstegangssoknad, setForstegangssoknad] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [result, setResult] = useState<{ success: boolean; message: string } | null>(null)
-    const [soknadId] = useState(() => crypto.randomUUID())
+    const [soknadId, setSoknadId] = useState(() => crypto.randomUUID())
     const [sendtArbeidsgiver] = useState(() => new Date().toISOString().replace("Z", ""))
 
     const handleCheckboxChange = (key: keyof Selections) => {
@@ -97,7 +97,8 @@ export function PubliserPanel() {
         }))
     }
 
-    const isFormValid = fnr.trim().length === 11 && fom !== "" && tom !== "" && startSyketilfelle !== ""
+    const isFormValid =
+        fnr.trim().length === 11 && fom !== "" && tom !== "" && startSyketilfelle !== "" && soknadId.trim() !== ""
 
     const buildPayload = () => {
         const sporsmal: unknown[] = []
@@ -128,7 +129,7 @@ export function PubliserPanel() {
         }
 
         return {
-            id: soknadId,
+            id: soknadId.trim(),
             type: "ARBEIDSTAKERE",
             status: "SENDT",
             fnr: fnr.trim(),
@@ -189,6 +190,29 @@ export function PubliserPanel() {
 
             <div className="options-card">
                 <div className="options-title">Personopplysninger</div>
+
+                <div className="form-group">
+                    <label className="form-label" htmlFor="callId">
+                        Call-ID (id) *
+                    </label>
+                    <div className="callid-row">
+                        <input
+                            type="text"
+                            id="callId"
+                            className="form-input"
+                            value={soknadId}
+                            onChange={(e) => setSoknadId(e.target.value)}
+                            placeholder="UUID som brukes som callId"
+                        />
+                        <button
+                            type="button"
+                            className="generate-id-button"
+                            onClick={() => setSoknadId(crypto.randomUUID())}
+                        >
+                            Generer ny
+                        </button>
+                    </div>
+                </div>
 
                 <div className="form-group">
                     <label className="form-label" htmlFor="fnr">
