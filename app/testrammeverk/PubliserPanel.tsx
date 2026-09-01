@@ -58,6 +58,19 @@ const labels: Record<keyof Selections, string> = {
     oppholdUtenforNorge: "Opphold utenfor Norge",
 }
 
+// Konverterer verdien fra en datetime-local-velger (YYYY-MM-DDTHH:mm eller
+// YYYY-MM-DDTHH:mm:ss) til backend-formatet med mikrosekunder, f.eks.
+// "2022-05-11T17:32:04.071367". Tom verdi gir null.
+const toMikrosekundIso = (value: string): string | null => {
+    if (value.trim() === "") return null
+    let iso = value.trim()
+    // Legg til sekunder hvis velgeren kun ga minutter
+    if (iso.length === 16) iso += ":00"
+    // Legg til mikrosekunder hvis de mangler
+    if (!iso.includes(".")) iso += ".000000"
+    return iso
+}
+
 export function PubliserPanel() {
     const [selections, setSelections] = useState<Selections>({
         arbeidUtenforNorgeGammelt: { enabled: false, answer: null },
@@ -75,7 +88,8 @@ export function PubliserPanel() {
     const [isLoading, setIsLoading] = useState(false)
     const [result, setResult] = useState<{ success: boolean; message: string } | null>(null)
     const [soknadId, setSoknadId] = useState(() => crypto.randomUUID())
-    const [sendtArbeidsgiver] = useState(() => new Date().toISOString().replace("Z", ""))
+    const [sendtArbeidsgiver, setSendtArbeidsgiver] = useState(() => new Date().toISOString().slice(0, 19))
+    const [sendtNav, setSendtNav] = useState("")
 
     const handleCheckboxChange = (key: keyof Selections) => {
         setSelections((prev) => ({
@@ -136,8 +150,8 @@ export function PubliserPanel() {
             fom: fom,
             tom: tom,
             startSyketilfelle: startSyketilfelle,
-            sendtArbeidsgiver: sendtArbeidsgiver,
-            sendtNav: null,
+            sendtArbeidsgiver: toMikrosekundIso(sendtArbeidsgiver),
+            sendtNav: toMikrosekundIso(sendtNav),
             dodsdato: null,
             ettersending: false,
             arbeidUtenforNorge:
@@ -151,7 +165,7 @@ export function PubliserPanel() {
 
     const previewJson = useMemo(
         () => JSON.stringify(buildPayload(), null, 2),
-        [selections, fnr, fom, tom, startSyketilfelle, forstegangssoknad, soknadId, sendtArbeidsgiver],
+        [selections, fnr, fom, tom, startSyketilfelle, forstegangssoknad, soknadId, sendtArbeidsgiver, sendtNav],
     )
 
     const handlePubliser = async () => {
@@ -291,6 +305,46 @@ export function PubliserPanel() {
                             />
                             <span>false</span>
                         </label>
+                    </div>
+                </div>
+
+                <div className="form-row">
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="sendtArbeidsgiver">
+                            Sendt arbeidsgiver
+                        </label>
+                        <input
+                            type="datetime-local"
+                            id="sendtArbeidsgiver"
+                            className="form-input"
+                            step={1}
+                            value={sendtArbeidsgiver}
+                            onChange={(e) => setSendtArbeidsgiver(e.target.value)}
+                        />
+                        <span className="field-hint">
+              {sendtArbeidsgiver.trim() === ""
+                  ? "Tom = null. Velg dato og klokkeslett for a sette en verdi."
+                  : `Sendes som: ${toMikrosekundIso(sendtArbeidsgiver)}`}
+            </span>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="sendtNav">
+                            Sendt Nav
+                        </label>
+                        <input
+                            type="datetime-local"
+                            id="sendtNav"
+                            className="form-input"
+                            step={1}
+                            value={sendtNav}
+                            onChange={(e) => setSendtNav(e.target.value)}
+                        />
+                        <span className="field-hint">
+              {sendtNav.trim() === ""
+                  ? "Tom = null. Velg dato og klokkeslett for a sette en verdi."
+                  : `Sendes som: ${toMikrosekundIso(sendtNav)}`}
+            </span>
                     </div>
                 </div>
             </div>
