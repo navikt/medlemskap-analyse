@@ -85,6 +85,9 @@ export function PubliserPanel() {
     const [soknadId, setSoknadId] = useState(() => crypto.randomUUID())
     const [sendtArbeidsgiver, setSendtArbeidsgiver] = useState(() => new Date().toISOString().slice(0, 10))
     const [sendtNav, setSendtNav] = useState("")
+    const [oppholdVedtaksdato, setOppholdVedtaksdato] = useState("")
+    const [oppholdPeriodeFom, setOppholdPeriodeFom] = useState("")
+    const [oppholdPeriodeTom, setOppholdPeriodeTom] = useState("")
 
     const handleCheckboxChange = (key: keyof Selections) => {
         setSelections((prev) => ({
@@ -129,7 +132,25 @@ export function PubliserPanel() {
 
         if (selections.oppholdstillatelse.enabled && selections.oppholdstillatelse.answer) {
             const template = jsonTemplates.oppholdstillatelse[selections.oppholdstillatelse.answer]
-            sporsmal.push(...template.sporsmal)
+
+            if (selections.oppholdstillatelse.answer === "JA") {
+                // Dyp-klon slik at vi ikke muterer den importerte JSON-en, og overstyr
+                // verdiene for vedtaksdato og periode basert pa brukerens input.
+                const cloned = JSON.parse(JSON.stringify(template.sporsmal))
+                for (const sp of cloned) {
+                    for (const under of sp.undersporsmal ?? []) {
+                        if (under.tag === "MEDLEMSKAP_OPPHOLDSTILLATELSE_VEDTAKSDATO" && oppholdVedtaksdato !== "") {
+                            under.svar = [{ verdi: oppholdVedtaksdato }]
+                        }
+                        if (under.tag === "MEDLEMSKAP_OPPHOLDSTILLATELSE_PERIODE" && (oppholdPeriodeFom !== "" || oppholdPeriodeTom !== "")) {
+                            under.svar = [{ verdi: JSON.stringify({ fom: oppholdPeriodeFom, tom: oppholdPeriodeTom }) }]
+                        }
+                    }
+                }
+                sporsmal.push(...cloned)
+            } else {
+                sporsmal.push(...template.sporsmal)
+            }
         }
 
         if (selections.oppholdUtenforNorge.enabled && selections.oppholdUtenforNorge.answer) {
@@ -160,7 +181,20 @@ export function PubliserPanel() {
 
     const previewJson = useMemo(
         () => JSON.stringify(buildPayload(), null, 2),
-        [selections, fnr, fom, tom, startSyketilfelle, forstegangssoknad, soknadId, sendtArbeidsgiver, sendtNav],
+        [
+            selections,
+            fnr,
+            fom,
+            tom,
+            startSyketilfelle,
+            forstegangssoknad,
+            soknadId,
+            sendtArbeidsgiver,
+            sendtNav,
+            oppholdVedtaksdato,
+            oppholdPeriodeFom,
+            oppholdPeriodeTom,
+        ],
     )
 
     const handlePubliser = async () => {
@@ -308,7 +342,7 @@ export function PubliserPanel() {
                 </div>
 
                 <div className="form-group">
-                    <label className="form-label">Førstegangssoknad</label>
+                    <label className="form-label">Forstegangssoknad</label>
                     <div className="radio-group">
                         <label className="radio-label">
                             <input
@@ -371,6 +405,53 @@ export function PubliserPanel() {
                     </div>
                 ))}
             </div>
+
+            {selections.oppholdstillatelse.enabled && selections.oppholdstillatelse.answer === "JA" && (
+                <div className="options-card">
+                    <div className="options-title">Detaljer for oppholdstillatelse</div>
+
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="oppholdVedtaksdato">
+                            Vedtaksdato
+                        </label>
+                        <input
+                            type="date"
+                            id="oppholdVedtaksdato"
+                            className="form-input"
+                            value={oppholdVedtaksdato}
+                            onChange={(e) => setOppholdVedtaksdato(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="oppholdPeriodeFom">
+                                Periode for oppholdstillatelse - fra (fom)
+                            </label>
+                            <input
+                                type="date"
+                                id="oppholdPeriodeFom"
+                                className="form-input"
+                                value={oppholdPeriodeFom}
+                                onChange={(e) => setOppholdPeriodeFom(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="oppholdPeriodeTom">
+                                Periode for oppholdstillatelse - til (tom)
+                            </label>
+                            <input
+                                type="date"
+                                id="oppholdPeriodeTom"
+                                className="form-input"
+                                value={oppholdPeriodeTom}
+                                onChange={(e) => setOppholdPeriodeTom(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="button-row">
                 <button onClick={handlePubliser} className="publish-button" disabled={!isFormValid || isLoading}>
