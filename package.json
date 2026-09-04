@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@navikt/nav-dekoratoren-moduler": "^3.4.0",
+    "@navikt/nav-dekoratoren-moduler": "^4.0.0",
     "@navikt/oasis": "^4.1.0",
     "js-yaml": "^4.1.0",
     "next": "16.0.7",
