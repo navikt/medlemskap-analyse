@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import { PubliserPanel } from "./PubliserPanel"
 import { NullstillingPanel } from "./NullstillingPanel"
 import { BrukersporsmalPanel } from "./BrukersporsmalPanel"
+import { SpeilPanel } from "./SpeilPanel"
 import "./page.css"
 
-type Tab = "publiser" | "nullstilling" | "brukersporsmal"
+type Tab = "publiser" | "nullstilling" | "brukersporsmal" | "speil"
 
 export default function TestrammeverkPage() {
     const [isDev, setIsDev] = useState<boolean | null>(null)
@@ -65,12 +66,21 @@ export default function TestrammeverkPage() {
                 >
                     Nullstilling
                 </button>
+                <button
+                    role="tab"
+                    aria-selected={activeTab === "speil"}
+                    className={`tab ${activeTab === "speil" ? "active" : ""}`}
+                    onClick={() => setActiveTab("speil")}
+                >
+                    Speil
+                </button>
             </div>
 
             <div className="tab-panel">
                 {activeTab === "publiser" && <PubliserPanel />}
                 {activeTab === "nullstilling" && <NullstillingPanel />}
                 {activeTab === "brukersporsmal" && <BrukersporsmalPanel />}
+                {activeTab === "speil" && <SpeilPanel />}
             </div>
         </div>
     )
