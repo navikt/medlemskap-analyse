@@ -5,15 +5,15 @@ import "./page.css"
 
 type Speilsvar = "JA" | "NEI" | "UAVKLART" | "UAVKLART_MED_BRUKERSPORSMAAL"
 
-interface BomloInputPeriode {
+interface Periode {
     fom: string
     tom: string
 }
 
-interface BomloRequest {
+interface SpeilvurderingRequest {
     fnr: string
     "førsteDagForYtelse": string | null
-    periode: BomloInputPeriode
+    periode: Periode
     ytelse: "SYKEPENGER" | null
 }
 
@@ -43,9 +43,9 @@ export function SpeilPanel() {
         setIsLoading(true)
         setResult(null)
 
-        const payload: BomloRequest = {
+        const payload: SpeilvurderingRequest = {
             fnr: fnr.trim(),
-            "førsteDagForYtelse": forsteDagForYtelse !== "" ? forsteDagForYtelse : fom,
+            "førsteDagForYtelse": forsteDagForYtelse !== "" ? forsteDagForYtelse : null,
             periode: { fom, tom },
             ytelse: "SYKEPENGER",
         }
@@ -136,6 +136,7 @@ export function SpeilPanel() {
                         value={forsteDagForYtelse}
                         onChange={(e) => setForsteDagForYtelse(e.target.value)}
                     />
+                    <span className="field-hint">Tom = sendes som null.</span>
                 </div>
             </div>
 

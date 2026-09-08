@@ -43,6 +43,17 @@ export async function POST(request: NextRequest) {
         const SYKEPENGER_API_BASE_URL = config.SYKEPENGER_API_BASE_URL
         const SYKEPENGER_CLIENT = config.SYKEPENGER_CLIENT
 
+        if (!SYKEPENGER_API_BASE_URL || !SYKEPENGER_CLIENT) {
+            const mangler = [
+                !SYKEPENGER_API_BASE_URL ? "SYKEPENGER_API_BASE_URL" : null,
+                !SYKEPENGER_CLIENT ? "SYKEPENGER_CLIENT" : null,
+            ]
+                .filter(Boolean)
+                .join(", ")
+            console.error(`[speilvurdering] Mangler konfigurasjon: ${mangler}`)
+            return new NextResponse(null, { status: 500 })
+        }
+
         const body = await request.json()
         const fnr: string | undefined = body?.fnr
         const periode = body?.periode
@@ -69,21 +80,25 @@ export async function POST(request: NextRequest) {
 
         const authHeader = request.headers.get("Authorization")
         if (!authHeader) {
+            console.warn("[speilvurdering] Mangler Authorization-header")
             return new NextResponse(null, { status: 401 })
         }
 
         const token = getToken(authHeader)
         if (!token) {
+            console.warn("[speilvurdering] Fant ikke token i Authorization-header")
             return new NextResponse(null, { status: 401 })
         }
 
         const validation = await validateToken(token)
         if (!validation.ok) {
+            console.warn("[speilvurdering] Ugyldig token")
             return new NextResponse(null, { status: 401 })
         }
 
         const oboToken = await requestAzureOboToken(token, SYKEPENGER_CLIENT)
         if (!oboToken.ok) {
+            console.error("[speilvurdering] Klarte ikke a hente OBO-token")
             throw new Error("Tokenfeil: OBO token var null")
         }
 
@@ -109,17 +124,17 @@ export async function POST(request: NextRequest) {
             signal: controller.signal,
         })
 
-        clearTimeout(timeout)
-
         if (!response.ok) {
+            console.error(`[speilvurdering] Backend svarte med status ${response.status}`)
             return new NextResponse(null, { status: response.status })
         }
 
         const data = await response.json()
         return NextResponse.json(data)
     } catch (error) {
-        console.error("Feil ved speilvurdering:", error)
-        clearTimeout(timeout)
+        console.error("[speilvurdering] Uventet feil:", error)
         return new NextResponse(null, { status: 500 })
+    } finally {
+        clearTimeout(timeout)
     }
 }
