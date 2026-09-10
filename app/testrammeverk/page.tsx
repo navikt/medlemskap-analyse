@@ -81,7 +81,7 @@ export default function TestrammeverkPage() {
                     className={`tab ${activeTab === "flex" ? "active" : ""}`}
                     onClick={() => setActiveTab("flex")}
                 >
-                    Flex
+                    Medlemskapsstatus
                 </button>
             </div>
 
