@@ -5,9 +5,10 @@ import { PubliserPanel } from "./PubliserPanel"
 import { NullstillingPanel } from "./NullstillingPanel"
 import { BrukersporsmalPanel } from "./BrukersporsmalPanel"
 import { SpeilPanel } from "./SpeilPanel"
+import { FlexPanel } from "./FlexPanel"
 import "./page.css"
 
-type Tab = "publiser" | "nullstilling" | "brukersporsmal" | "speil"
+type Tab = "publiser" | "nullstilling" | "brukersporsmal" | "speil" | "flex"
 
 export default function TestrammeverkPage() {
     const [isDev, setIsDev] = useState<boolean | null>(null)
@@ -74,6 +75,14 @@ export default function TestrammeverkPage() {
                 >
                     Speil
                 </button>
+                <button
+                    role="tab"
+                    aria-selected={activeTab === "flex"}
+                    className={`tab ${activeTab === "flex" ? "active" : ""}`}
+                    onClick={() => setActiveTab("flex")}
+                >
+                    Flex
+                </button>
             </div>
 
             <div className="tab-panel">
@@ -81,6 +90,7 @@ export default function TestrammeverkPage() {
                 {activeTab === "nullstilling" && <NullstillingPanel />}
                 {activeTab === "brukersporsmal" && <BrukersporsmalPanel />}
                 {activeTab === "speil" && <SpeilPanel />}
+                {activeTab === "flex" && <FlexPanel />}
             </div>
         </div>
     )
