@@ -5,6 +5,10 @@ import "./page.css"
 
 type FlexStatus = "JA" | "NEI" | "UAVKLART"
 
+// Fast sykepengesoknad-ID som sendes automatisk. Brukeren trenger ikke fylle
+// dette ut selv, men backend krever et UUID-formatert felt.
+const SYKEPENGESOKNAD_ID = "1111111a-22f2-3eb3-444f-555555ac555b"
+
 interface FlexvurderingRequest {
     sykepengesoknad_id: string
     fnr: string
@@ -22,7 +26,6 @@ interface FlexvurderingResponse {
 }
 
 export function FlexPanel() {
-    const [sykepengesoknadId, setSykepengesoknadId] = useState("")
     const [fnr, setFnr] = useState("")
     const [fom, setFom] = useState("")
     const [tom, setTom] = useState("")
@@ -32,12 +35,11 @@ export function FlexPanel() {
     )
 
     const datoRegex = /^\d{4}-\d{2}-\d{2}$/
-    const isValidSoknadId = sykepengesoknadId.trim() !== ""
     const isValidFnr = /^\d{11}$/.test(fnr.trim())
     const isValidFom = datoRegex.test(fom)
     const isValidTom = datoRegex.test(tom)
     const isValidPeriode = isValidFom && isValidTom && fom <= tom
-    const isFormValid = isValidSoknadId && isValidFnr && isValidPeriode
+    const isFormValid = isValidFnr && isValidPeriode
 
     const handleHent = async () => {
         if (!isFormValid) return
@@ -45,7 +47,7 @@ export function FlexPanel() {
         setResult(null)
 
         const payload: FlexvurderingRequest = {
-            sykepengesoknad_id: sykepengesoknadId.trim(),
+            sykepengesoknad_id: SYKEPENGESOKNAD_ID,
             fnr: fnr.trim(),
             fom,
             tom,
@@ -80,20 +82,6 @@ export function FlexPanel() {
     return (
         <div>
             <div className="options-card">
-                <div className="form-group">
-                    <label className="form-label" htmlFor="soknadId-flex">
-                        Sykepengesoknad-ID *
-                    </label>
-                    <input
-                        type="text"
-                        id="soknadId-flex"
-                        className="form-input"
-                        value={sykepengesoknadId}
-                        onChange={(e) => setSykepengesoknadId(e.target.value)}
-                        placeholder="UUID for sykepengesoknaden"
-                    />
-                </div>
-
                 <div className="form-group">
                     <label className="form-label" htmlFor="fnr-flex">
                         Fødselsnummer (11 siffer) *
