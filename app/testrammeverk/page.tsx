@@ -6,9 +6,10 @@ import { NullstillingPanel } from "./NullstillingPanel"
 import { BrukersporsmalPanel } from "./BrukersporsmalPanel"
 import { SpeilPanel } from "./SpeilPanel"
 import { FlexPanel } from "./FlexPanel"
+import { NyesteBrukersvarPanel } from "./NyesteBrukersvarPanel"
 import "./page.css"
 
-type Tab = "publiser" | "nullstilling" | "brukersporsmal" | "speil" | "flex"
+type Tab = "publiser" | "nullstilling" | "brukersporsmal" | "speil" | "flex" | "nyesteBrukersvar"
 
 export default function TestrammeverkPage() {
     const [isDev, setIsDev] = useState<boolean | null>(null)
@@ -81,7 +82,15 @@ export default function TestrammeverkPage() {
                     className={`tab ${activeTab === "flex" ? "active" : ""}`}
                     onClick={() => setActiveTab("flex")}
                 >
-                    Medlemskapsstatus
+                    Flex
+                </button>
+                <button
+                    role="tab"
+                    aria-selected={activeTab === "nyesteBrukersvar"}
+                    className={`tab ${activeTab === "nyesteBrukersvar" ? "active" : ""}`}
+                    onClick={() => setActiveTab("nyesteBrukersvar")}
+                >
+                    Nyeste brukersvar
                 </button>
             </div>
 
@@ -91,6 +100,7 @@ export default function TestrammeverkPage() {
                 {activeTab === "brukersporsmal" && <BrukersporsmalPanel />}
                 {activeTab === "speil" && <SpeilPanel />}
                 {activeTab === "flex" && <FlexPanel />}
+                {activeTab === "nyesteBrukersvar" && <NyesteBrukersvarPanel />}
             </div>
         </div>
     )
