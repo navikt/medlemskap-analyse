@@ -21,10 +21,81 @@ type ResultState =
     | { kind: "empty" }
     | { kind: "error"; message: string }
 
-function formatVerdi(verdi: unknown): string {
-    if (verdi === null || verdi === undefined) return "-"
-    if (typeof verdi === "object") return JSON.stringify(verdi, null, 2)
-    return String(verdi)
+const KEY_LABELS: Record<string, string> = {
+    sporsmalstekst: "Spørsmål",
+    svar: "Svar",
+    arbeidUtenforNorge: "Arbeid utenfor Norge",
+    oppholdUtenforEOS: "Opphold utenfor EØS",
+    oppholdUtenforNorge: "Opphold utenfor Norge",
+    arbeidsgiver: "Arbeidsgiver",
+    land: "Land",
+    grunn: "Grunn",
+    perioder: "Perioder",
+    fom: "Fra",
+    tom: "Til",
+    arbeidUtland: "Arbeid i utlandet",
+}
+
+function humanizeKey(key: string): string {
+    if (KEY_LABELS[key]) return KEY_LABELS[key]
+    const spaced = key.replace(/_/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2")
+    return spaced.charAt(0).toUpperCase() + spaced.slice(1)
+}
+
+function erPeriode(obj: Record<string, unknown>): boolean {
+    return "fom" in obj && "tom" in obj
+}
+
+function harInnhold(verdi: unknown): boolean {
+    if (verdi === null || verdi === undefined || verdi === "") return false
+    if (Array.isArray(verdi)) return verdi.length > 0
+    if (typeof verdi === "object") {
+        return Object.entries(verdi as Record<string, unknown>).some(([k]) => k !== "id")
+    }
+    return true
+}
+
+function PrettyValue({ value }: { value: unknown }) {
+    if (value === null || value === undefined || value === "") {
+        return <span className="pretty-empty">-</span>
+    }
+    if (typeof value === "boolean") {
+        return <span>{value ? "Ja" : "Nei"}</span>
+    }
+    if (typeof value === "string" || typeof value === "number") {
+        return <span>{String(value)}</span>
+    }
+    if (Array.isArray(value)) {
+        if (value.length === 0) return <span className="pretty-empty">-</span>
+        return (
+            <div className="pretty-list">
+                {value.map((item, i) => (
+                    <div className="pretty-list-item" key={i}>
+                        <PrettyValue value={item} />
+                    </div>
+                ))}
+            </div>
+        )
+    }
+    const obj = value as Record<string, unknown>
+    if (erPeriode(obj)) {
+        return <span>{`${obj.fom ?? "?"} – ${obj.tom ?? "?"}`}</span>
+    }
+    const entries = Object.entries(obj).filter(([k]) => k !== "id")
+    if (entries.length === 0) return <span className="pretty-empty">-</span>
+    return (
+        <div className="pretty-object">
+            {entries.map(([k, v]) => {
+                const nested = v !== null && typeof v === "object"
+                return (
+                    <div className={`pretty-field${nested ? " nested" : ""}`} key={k}>
+                        <span className="pretty-key">{humanizeKey(k)}</span>
+                        <PrettyValue value={v} />
+                    </div>
+                )
+            })}
+        </div>
+    )
 }
 
 export function NyesteBrukersvarPanel() {
@@ -70,7 +141,7 @@ export function NyesteBrukersvarPanel() {
 
     const felter: { label: string; key: keyof NyesteBrukersvarResponse }[] = [
         { label: "Soknad-ID", key: "soknadid" },
-        { label: "Hendelsesdato", key: "eventDate" },
+        { label: "eventDate", key: "eventDate" },
         { label: "Ytelse", key: "ytelse" },
         { label: "Status", key: "status" },
         { label: "Sporsmaal", key: "sporsmaal" },
@@ -115,19 +186,20 @@ export function NyesteBrukersvarPanel() {
                     )}
 
                     {result && result.kind === "success" && (
-                        <div className="brukersporsmal-result">
+                        <dl className="brukersvar-result">
                             {felter.map(({ label, key }) => {
                                 const verdi = result.data[key]
-                                const visning = formatVerdi(verdi)
-                                const erObjekt = verdi !== null && typeof verdi === "object"
+                                const komplekst = harInnhold(verdi) && typeof verdi === "object"
                                 return (
-                                    <div className="brukersporsmal-row" key={key}>
-                                        <span className="brukersporsmal-label">{label}</span>
-                                        {erObjekt ? <pre className="json-output">{visning}</pre> : <span>{visning}</span>}
+                                    <div className={`brukersvar-row${komplekst ? " kompleks" : ""}`} key={key}>
+                                        <dt className="brukersvar-label">{label}</dt>
+                                        <dd className="brukersvar-value">
+                                            <PrettyValue value={verdi} />
+                                        </dd>
                                     </div>
                                 )
                             })}
-                        </div>
+                        </dl>
                     )}
                 </div>
             </div>
