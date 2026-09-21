@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:20-slim@sha256:a1440303664b12241b224b53c6037731e040f53bd640e0bad9e83b47c10033fe AS runtime
+FROM --platform=linux/amd64 europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/node:20-slim@sha256:bc80594fb7759ff9329ba37124b9b384b2d49b7d739916b7b50642ce348ae489 AS runtime
 
 WORKDIR /app
 
