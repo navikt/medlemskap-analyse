@@ -62,14 +62,6 @@ export default function TestrammeverkPage() {
                 </button>
                 <button
                     role="tab"
-                    aria-selected={activeTab === "nullstilling"}
-                    className={`tab ${activeTab === "nullstilling" ? "active" : ""}`}
-                    onClick={() => setActiveTab("nullstilling")}
-                >
-                    Nullstilling
-                </button>
-                <button
-                    role="tab"
                     aria-selected={activeTab === "speil"}
                     className={`tab ${activeTab === "speil" ? "active" : ""}`}
                     onClick={() => setActiveTab("speil")}
@@ -82,7 +74,7 @@ export default function TestrammeverkPage() {
                     className={`tab ${activeTab === "flex" ? "active" : ""}`}
                     onClick={() => setActiveTab("flex")}
                 >
-                    Flex
+                    Medlemskapsstatus
                 </button>
                 <button
                     role="tab"
@@ -91,6 +83,14 @@ export default function TestrammeverkPage() {
                     onClick={() => setActiveTab("nyesteBrukersvar")}
                 >
                     Nyeste brukersvar
+                </button>
+                <button
+                    role="tab"
+                    aria-selected={activeTab === "nullstilling"}
+                    className={`tab ${activeTab === "nullstilling" ? "active" : ""}`}
+                    onClick={() => setActiveTab("nullstilling")}
+                >
+                    Nullstilling
                 </button>
             </div>
 
