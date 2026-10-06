@@ -33,7 +33,7 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
-      autoLoginIgnorePaths:
+      autoLoginIgnorePaths: []
 
   accessPolicy:
     outbound:
