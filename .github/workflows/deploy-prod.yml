@@ -58,7 +58,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v7
-      - uses: nais/deploy/actions/deploy@v2
+      - uses: nais/deploy/actions/deploy@v3
         env:
           CLUSTER: dev-gcp
           IMAGE: ${{ needs.build.outputs.image }}
@@ -74,7 +74,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v7
-      - uses: nais/deploy/actions/deploy@v2
+      - uses: nais/deploy/actions/deploy@v3
         env:
           CLUSTER: prod-gcp
           IMAGE: ${{ needs.build.outputs.image }}
