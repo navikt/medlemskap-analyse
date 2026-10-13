@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
 import fs from "fs"
 import path from "path"
-import yaml from "js-yaml"
+import { load } from "js-yaml"
 
 let cachedConfig: Record<string, string> | null = null
 
@@ -14,7 +14,7 @@ async function loadConfig(): Promise<Record<string, string>> {
     const filePath = path.join(process.cwd(), "config", fileName)
 
     const fileContents = fs.readFileSync(filePath, "utf8")
-    const yamlData = yaml.load(fileContents) as any
+    const yamlData = load(fileContents) as any
 
     const envVars: Record<string, string> = {}
 
