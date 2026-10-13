@@ -1,33 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
-import fs from "fs"
-import path from "path"
-import { load } from "js-yaml"
-
-let cachedConfig: Record<string, string> | null = null
-
-async function loadConfig(): Promise<Record<string, string>> {
-    if (cachedConfig) return cachedConfig
-
-    const env = process.env.NAIS_ENV === "prod" ? "prod" : "dev"
-    const fileName = `nais-${env}.yml`
-    const filePath = path.join(process.cwd(), "config", fileName)
-
-    const fileContents = fs.readFileSync(filePath, "utf8")
-    const yamlData = load(fileContents) as any
-
-    const envVars: Record<string, string> = {}
-
-    const envArray = Array.isArray(yamlData?.spec?.env) ? yamlData.spec.env : []
-    envArray.forEach((entry: any) => {
-        if (entry?.name && entry?.value !== undefined) {
-            envVars[entry.name] = String(entry.value).trim()
-        }
-    })
-
-    cachedConfig = envVars
-    return envVars
-}
 
 export async function POST(request: NextRequest) {
     // Kun tilgjengelig i dev
@@ -39,11 +11,19 @@ export async function POST(request: NextRequest) {
     const timeout = setTimeout(() => controller.abort(), 1000 * 60)
 
     try {
-        const config = await loadConfig()
-        const SYKEPENGER_API_BASE_URL = config.SYKEPENGER_API_BASE_URL
-        console.log("SYKEPENGER_API_BASE_URL", SYKEPENGER_API_BASE_URL)
-        const SYKEPENGER_CLIENT = config.SYKEPENGER_CLIENT
-        console.log("SYKEPENGER_CLIENT", SYKEPENGER_CLIENT)
+        const sykepengerApiBaseUrl = process.env.SYKEPENGER_API_BASE_URL
+        const sykepengerClient = process.env.SYKEPENGER_CLIENT
+
+        if (!sykepengerApiBaseUrl || !sykepengerClient) {
+            const missing = [
+                !sykepengerApiBaseUrl ? "SYKEPENGER_API_BASE_URL" : null,
+                !sykepengerClient ? "SYKEPENGER_CLIENT" : null,
+            ]
+                .filter(Boolean)
+                .join(", ")
+            console.error(`[slett-brukersvar] Mangler konfigurasjon: ${missing}`)
+            return new NextResponse(null, { status: 500 })
+        }
 
         const body = await request.json()
         const fnr = body.fnr
@@ -67,13 +47,13 @@ export async function POST(request: NextRequest) {
             return new NextResponse(null, { status: 401 })
         }
 
-        const oboToken = await requestAzureOboToken(token, SYKEPENGER_CLIENT)
+        const oboToken = await requestAzureOboToken(token, sykepengerClient)
         if (!oboToken.ok) {
-            console.error("OBO token feilet for client:", SYKEPENGER_CLIENT, "Error:", oboToken.error)
+            console.error("OBO token feilet for client:", sykepengerClient, "Error:", oboToken.error)
             throw new Error(`Tokenfeil: ${oboToken.error}`)
         }
 
-        const backendUrl = `${SYKEPENGER_API_BASE_URL}/test/slett-brukersvar`
+        const backendUrl = `${sykepengerApiBaseUrl}/test/slett-brukersvar`
 
         const response = await fetch(backendUrl, {
             method: "POST",
@@ -85,8 +65,6 @@ export async function POST(request: NextRequest) {
             signal: controller.signal,
         })
 
-        clearTimeout(timeout)
-
         if (!response.ok) {
             return new NextResponse(null, { status: response.status })
         }
@@ -95,7 +73,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(data)
     } catch (error) {
         console.error("Feil ved slett-brukersvar:", error)
-        clearTimeout(timeout)
         return new NextResponse(null, { status: 500 })
+    } finally {
+        clearTimeout(timeout)
     }
 }

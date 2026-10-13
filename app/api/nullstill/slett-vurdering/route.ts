@@ -1,33 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getToken, validateToken, requestAzureOboToken } from "@navikt/oasis"
-import fs from "fs"
-import path from "path"
-import { load } from "js-yaml"
-
-let cachedConfig: Record<string, string> | null = null
-
-async function loadConfig(): Promise<Record<string, string>> {
-    if (cachedConfig) return cachedConfig
-
-    const env = process.env.NAIS_ENV === "prod" ? "prod" : "dev"
-    const fileName = `nais-${env}.yml`
-    const filePath = path.join(process.cwd(), "config", fileName)
-
-    const fileContents = fs.readFileSync(filePath, "utf8")
-    const yamlData = load(fileContents) as any
-
-    const envVars: Record<string, string> = {}
-
-    const envArray = Array.isArray(yamlData?.spec?.env) ? yamlData.spec.env : []
-    envArray.forEach((entry: any) => {
-        if (entry?.name && entry?.value !== undefined) {
-            envVars[entry.name] = String(entry.value).trim()
-        }
-    })
-
-    cachedConfig = envVars
-    return envVars
-}
 
 export async function POST(request: NextRequest) {
     // Kun tilgjengelig i dev
@@ -39,9 +11,19 @@ export async function POST(request: NextRequest) {
     const timeout = setTimeout(() => controller.abort(), 1000 * 60)
 
     try {
-        const config = await loadConfig()
-        const API_BASE_URL = config.API_BASE_URL
-        const SAGA_CLIENT = config.SAGA_CLIENT
+        const apiBaseUrl = process.env.API_BASE_URL
+        const sagaClient = process.env.SAGA_CLIENT
+
+        if (!apiBaseUrl || !sagaClient) {
+            const missing = [
+                !apiBaseUrl ? "API_BASE_URL" : null,
+                !sagaClient ? "SAGA_CLIENT" : null,
+            ]
+                .filter(Boolean)
+                .join(", ")
+            console.error(`[slett-vurdering] Mangler konfigurasjon: ${missing}`)
+            return new NextResponse(null, { status: 500 })
+        }
 
         const body = await request.json()
         const fnr = body.fnr
@@ -65,13 +47,13 @@ export async function POST(request: NextRequest) {
             return new NextResponse(null, { status: 401 })
         }
 
-        const oboToken = await requestAzureOboToken(token, SAGA_CLIENT)
+        const oboToken = await requestAzureOboToken(token, sagaClient)
         if (!oboToken.ok) {
-            console.error("OBO token feilet for client:", SAGA_CLIENT, "Error:", oboToken.error)
+            console.error("OBO token feilet for client:", sagaClient, "Error:", oboToken.error)
             throw new Error(`Tokenfeil: ${oboToken.error}`)
         }
 
-        const backendUrl = `${API_BASE_URL}/test/slett-vurdering`
+        const backendUrl = `${apiBaseUrl}/test/slett-vurdering`
 
         const response = await fetch(backendUrl, {
             method: "POST",
@@ -83,8 +65,6 @@ export async function POST(request: NextRequest) {
             signal: controller.signal,
         })
 
-        clearTimeout(timeout)
-
         if (!response.ok) {
             return new NextResponse(null, { status: response.status })
         }
@@ -93,7 +73,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(data)
     } catch (error) {
         console.error("Feil ved slett-vurdering:", error)
-        clearTimeout(timeout)
         return new NextResponse(null, { status: 500 })
+    } finally {
+        clearTimeout(timeout)
     }
 }
